@@ -79,7 +79,17 @@ h2{font-size:clamp(28px,3.4vw,36px);line-height:1.1;margin:0 0 14px}
 .notes{columns:2 320px;column-gap:40px;padding-left:20px;margin:0}
 .notes li{break-inside:avoid;margin-bottom:8px}
 .foot{color:var(--mute);font-size:14px}
-@media(max-width:700px){.stage{grid-template-columns:minmax(0,1fr)}.ring{max-width:260px}.plan{grid-template-columns:minmax(0,1fr)}.now{text-align:center}.hint{margin-inline:auto}.btns{justify-content:center}}
+.figbox{max-width:300px;margin:4px 0 10px}
+svg.main{width:100%;height:auto;display:block;background:var(--soft);border-radius:12px}
+svg.th{width:66px;height:46px;flex:none;background:var(--soft);border-radius:6px;align-self:center}
+svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
+svg[data-fig] .aux rect{fill:var(--line)}svg[data-fig] .aux line{stroke:var(--mute);stroke-width:3}
+svg[data-fig] polyline,svg[data-fig] .tr{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:6}
+svg[data-fig] .near polyline,svg[data-fig] .tr{stroke:var(--ink)}svg[data-fig] .hd{fill:var(--ink)}
+svg[data-fig] .far polyline{stroke:var(--clay)}
+svg.front .far polyline{stroke:var(--ink)}
+.ex{align-items:center}
+@media(max-width:700px){.stage{grid-template-columns:minmax(0,1fr)}.ring{max-width:260px}.plan{grid-template-columns:minmax(0,1fr)}.now{text-align:center}.figbox{margin-inline:auto}.ring{max-width:220px}.hint{margin-inline:auto}.btns{justify-content:center}}
 @media(prefers-reduced-motion:no-preference){#arc{transition:stroke-dashoffset .12s linear}}
 </style>
 </head>
@@ -104,6 +114,7 @@ h2{font-size:clamp(28px,3.4vw,36px);line-height:1.1;margin:0 0 14px}
     <div class="now" aria-live="polite">
       <div class="blk" id="blk">Start</div>
       <div class="big" id="name">Bereit machen</div>
+      <div class="figbox" id="fig"></div>
       <div class="var" id="var" hidden></div>
       <p class="hint" id="hint"></p>
       <div class="cmd" id="cmd"></div>
@@ -142,6 +153,98 @@ h2{font-size:clamp(28px,3.4vw,36px);line-height:1.1;margin:0 0 14px}
 <script>
 {
 const $=s=>document.querySelector(s);
+const FL=122,FW=220;
+const SPR_A=[165,90,0,-20,-40,-40,-10,40,120,3],SPR_B=[165,-20,-40,90,0,40,120,-40,-10,3];
+const HP=[115,-65,-65,-65,-65,0,0,0,0],PD=[102,-78,-78,-78,-78,-60,60,-60,60],FP=[102,-78,-78,-78,-78,0,90,0,90];
+const LB=[180,85,0,-10,-90,0,0,0,0],SQ=[150,80,-20,80,-20,90,90,90,90];
+const POSE={
+'Inchworm':{a:[30,0,0,0,0,50,50,50,50],b:HP},
+'Einbeinstand':{a:[180,90,0,0,0,60,60,-60,-60],b:[180,85,5,0,0,80,80,-80,-80],sp:3.5},
+'High-Knees-Sprint':{a:SPR_A,b:SPR_B,sp:.7},
+'Lateral Shuffle':{a:[180,30,8,-30,-8,30,70,-30,-70,0,-14],b:[180,14,4,-14,-4,30,70,-30,-70,2,14],fr:1,sp:.9},
+'Push-ups':{a:HP,b:PD},
+'Split Squat':{a:[180,30,0,-30,-20,0,0,0,0],b:LB},
+'Glute Bridge':{a:[-90,150,20,150,20,90,90,90,90],b:[-50,100,5,100,5,90,90,90,90]},
+'Burpees':{a:[180,0,0,0,0,165,165,195,195,8],b:HP,sp:1.8},
+'High Knees':{a:SPR_A,b:SPR_B,sp:.6},
+'Slow-Motion-Squats':{a:[180,0,0,0,0,90,90,90,90],b:SQ,sp:4},
+'Seiltänzer-Gang':{a:[180,10,0,-10,-5,60,60,60,60,0,-6],b:[180,-10,-5,10,0,60,60,60,60,0,6],sp:2},
+'Quick Feet':{a:[165,25,-10,10,-25,30,80,20,70,2],b:[165,10,-25,25,-10,20,70,30,80,2],sp:.35},
+'Dot Drill':{a:[180,15,5,-15,-5,30,70,-30,-70],b:[180,3,3,-3,-3,30,70,-30,-70,8],fr:1,sp:.6},
+'Plank Shoulder Taps':{a:HP,b:[115,-65,-65,-65,-65,30,-150,0,0],sp:1.2},
+'Lateral Lunges':{a:[180,5,0,-5,0,20,60,-20,-60],b:[170,50,0,-45,-45,20,60,-20,-60],fr:1},
+'Y-T-W liegend':{a:[90,-90,-90,-90,-90,100,100,100,100],b:[90,-90,-90,-90,-90,240,150,240,150],sp:3},
+'Mountain Climbers':{a:[115,60,-80,-65,-65,0,0,0,0],b:[115,-65,-65,60,-80,0,0,0,0],sp:.6},
+'Bear Crawl':{a:[104,0,-80,10,-75,10,0,-10,0,0,-4],b:[104,10,-75,0,-80,-10,0,10,0,0,4],sp:1},
+'Hollow Body Hold':{a:[-110,110,110,110,110,-115,-115,-115,-115],b:[-106,106,106,106,106,-112,-112,-112,-112],sp:3.5},
+'Bird Dog':{a:[107,0,-90,0,-90,0,0,0,0],b:[107,0,-90,-88,-88,95,95,0,0],sp:3},
+'Shuttle Run':{a:[...SPR_A.slice(0,9),3,-25],b:[70,80,-10,-40,-70,20,20,-30,0,0,25],sp:1.6},
+'Box Step':{a:[180,10,0,-10,0,30,70,-30,-70,0,-8],b:[180,20,5,-5,0,30,70,-30,-70,2,8],fr:1,sp:.8},
+'Wall Sit':{a:[180,90,0,90,0,30,80,30,80],b:[180,90,0,90,0,35,85,35,85],sp:3,wall:1},
+'Reverse Lunge mit Rotation':{a:[180,0,0,0,0,90,90,90,90],b:[180,85,0,-10,-90,90,90,60,90]},
+'Seitstütz':{a:[102,-78,-78,-78,-78,0,90,180,180],b:[106,-74,-74,-74,-74,0,90,180,180],sp:3},
+'Squat Jumps':{a:[150,80,-20,80,-20,-30,-20,-30,-20],b:[180,5,5,5,5,165,165,195,195,18],sp:1.2},
+'Broad Jumps':{a:[130,70,-25,70,-25,-50,-40,-50,-40,0,-25],b:[170,70,10,70,10,100,100,100,100,22,25],sp:1.6},
+'Dead Bug':{a:[-90,180,90,180,90,180,180,180,180],b:[-90,95,95,180,90,180,180,260,260],sp:3},
+'Standwaage':{a:[180,0,0,0,0,0,0,0,0],b:[95,0,0,-88,-88,95,95,95,95],sp:3.5},
+'Zick-Zack-Sprint':{a:[...SPR_A.slice(0,9),3,-20],b:[...SPR_B.slice(0,9),3,20],sp:1},
+'Linien-Hops':{a:[180,3,3,-3,-3,30,70,-30,-70,0,-12],b:[180,10,-5,-10,5,30,70,-30,-70,10,12],fr:1,sp:.7},
+'Enge Push-ups':{a:HP,b:[102,-78,-78,-78,-78,-70,70,-70,70]},
+'Einbeiniges Kreuzheben':{a:[180,0,0,0,0,0,0,0,0],b:[95,5,-5,-88,-88,0,0,0,0],sp:3.2},
+'Superman-Hold':{a:[95,-95,-95,-95,-95,100,100,100,100],b:[99,-99,-99,-99,-99,106,106,106,106],sp:3},
+'Plank Jacks':{a:HP,b:[115,-58,-58,-72,-72,0,0,0,0,3],sp:.8},
+'Flutter Kicks':{a:[-100,105,105,95,95,90,90,90,90],b:[-100,95,95,105,105,90,90,90,90],sp:.6},
+'Plank March':{a:FP,b:HP,sp:2},
+'Einbeinstand mit Rotation':{a:[180,90,0,0,0,70,120,70,120],b:[180,90,0,0,0,110,150,40,90],sp:3},
+'Reaktions-Drill':{a:[180,25,5,-25,-5,25,70,-25,-70],b:[180,35,5,-15,-5,25,70,-25,-70,0,20],fr:1,sp:1.1},
+'Lateral Bounds':{a:[175,12,-4,-30,40,30,80,-30,-80,0,-22],b:[185,30,-40,-12,4,60,100,-60,-100,12,22],fr:1,sp:1.4},
+'Decline Push-ups':{a:[97,-83,-83,-83,-83,0,0,0,0],b:[80,-100,-100,-100,-100,-70,70,-70,70],box:1},
+'Wadenheben':{a:[180,0,0,0,0,70,90,0,0],b:[180,0,0,0,0,70,90,0,0,6],sp:2},
+'Holzhacker':{a:[175,5,0,-5,0,135,135,135,135],b:[185,20,-5,-20,5,-30,-30,-30,-30],fr:1,sp:2},
+'Jump Lunges':{a:LB,b:[180,40,-10,-30,-60,30,60,-30,10,16],sp:1.2},
+'Jumping Jacks':{a:[180,3,3,-3,-3,10,10,-10,-10],b:[180,22,22,-22,-22,160,160,-160,-160,6],fr:1,sp:.8}
+};
+const SEG={t:34,h:11,th:26,sh:26,ua:18,fa:18,ft:7};
+const dv=a=>{const r=a*Math.PI/180;return[Math.sin(r),Math.cos(r)]};
+const ad=(o,a,l)=>{const v=dv(a);return[o[0]+v[0]*l,o[1]+v[1]*l]};
+function joints(P,fr){
+ const [T,l1,s1,l2,s2,u1,f1,u2,f2]=P,p=[0,0],n=ad(p,T,SEG.t),hd=ad(n,T,SEG.h);
+ const k1=ad(p,l1,SEG.th),a1=ad(k1,s1,SEG.sh),k2=ad(p,l2,SEG.th),a2=ad(k2,s2,SEG.sh);
+ const t1=fr?a1:ad(a1,s1+90,SEG.ft),t2=fr?a2:ad(a2,s2+90,SEG.ft);
+ const e1=ad(n,u1,SEG.ua),w1=ad(e1,f1,SEG.fa),e2=ad(n,u2,SEG.ua),w2=ad(e2,f2,SEG.fa);
+ const J={p,n,hd,k1,a1,t1,k2,a2,t2,e1,w1,e2,w2};
+ let my=-1e9;for(const k in J)my=Math.max(my,J[k][1]+(k==='hd'?8:0));
+ const oy=FL-my-(P[9]||0)-(k=>0)(),ox=P[10]||0;
+ for(const k in J)J[k]=[J[k][0]+ox,J[k][1]+oy];
+ return J;
+}
+const lerp=(A,B,t)=>A.map((v,i)=>v+((B[i]||0)-v)*t).concat(B.slice(A.length).map(v=>v*t));
+const pad=P=>{const r=P.slice();while(r.length<11)r.push(0);return r};
+function figSVG(name,cls){
+ const D=POSE[name];if(!D)return'';
+ return `<svg class="${cls}" viewBox="0 -22 ${FW} 154" data-fig="${name}" aria-hidden="true"><line class="fl" x1="0" y1="${FL}" x2="${FW}" y2="${FL}"/><g class="aux"></g><g class="far"><polyline class="l2"/><polyline class="r2"/></g><g class="near"><polyline class="l1"/><line class="tr"/><polyline class="r1"/><circle class="hd" r="8"/></g></svg>`;
+}
+const pt=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+function drawFig(svg,t){
+ const name=svg.dataset.fig,D=POSE[name];if(!D)return;
+ if(svg._sx===undefined){let lo=1e9,hi=-1e9;for(const P of[D.a,D.b])for(const v of Object.values(joints(pad(P),D.fr))){lo=Math.min(lo,v[0]-8);hi=Math.max(hi,v[0]+8)}svg._sx=FW/2-(lo+hi)/2;
+  if(D.fr)svg.classList.add('front');
+  const J=joints(pad(D.a),D.fr),aux=svg.querySelector('.aux');
+  if(D.box){const x=Math.min(J.t1[0],J.a1[0])+svg._sx;aux.innerHTML=`<rect x="${x-14}" y="${FL-27}" width="30" height="27" rx="3"/>`}
+  if(D.wall){const x=J.p[0]+svg._sx-6;aux.innerHTML=`<line x1="${x}" y1="10" x2="${x}" y2="${FL}"/>`}}
+ const P=lerp(pad(D.a),pad(D.b),t),J=joints(P,D.fr),sx=svg._sx,m=p=>[p[0]+sx,p[1]];
+ const q=(c,a)=>svg.querySelector(c).setAttribute('points',pt(a.map(m)));
+ q('.l1',[J.p,J.k1,J.a1,J.t1]);q('.l2',[J.p,J.k2,J.a2,J.t2]);q('.r1',[J.n,J.e1,J.w1]);q('.r2',[J.n,J.e2,J.w2]);
+ const tr=svg.querySelector('.tr'),a=m(J.p),b=m(J.n);tr.setAttribute('x1',a[0]);tr.setAttribute('y1',a[1]);tr.setAttribute('x2',b[0]);tr.setAttribute('y2',b[1]);
+ const h=m(J.hd),c=svg.querySelector('.hd');c.setAttribute('cx',h[0]);c.setAttribute('cy',h[1]);
+}
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function figLoop(now){
+ for(const s of document.querySelectorAll('svg[data-fig]')){const D=POSE[s.dataset.fig];if(!D)continue;const sp=(D.sp||2.4)*1000;const t=RM?(s.classList.contains('main')?.5:0):(1-Math.cos(2*Math.PI*now/sp))/2;drawFig(s,t)}
+ requestAnimationFrame(figLoop);
+}
+requestAnimationFrame(figLoop);
+
 const DAYS=[
  {n:'Montag',s:'Mo',t:'Antritt & Druck',akt:[
   {n:'Inchworm',h:'Mit den Händen nach vorn laufen, im Brett kurz halten, zurücklaufen. Knie möglichst gestreckt.'},
@@ -285,7 +388,7 @@ function renderPlan(){
  $('#ptitle').textContent=`${D.n}: ${D.t} · Woche ${week} (${P.name})`;
  $('#plan').innerHTML=B.map((b,bi)=>{
   const t=b.m==='seq'?`${b.ex.length} × ${b.t[0]} s, ${b.t[1]} s Pause`:`${b.r} Runden im Wechsel · ${b.t[0]} s / ${b.t[1]} s Pause`;
-  return `<div class="card"><h3>${b.l}</h3><div class="t">${fmt(b.dur)} min · ${t}</div>${b.ex.map(e=>`<div class="ex" data-n="${e.n}"><b>${e.n}</b>${vt(e)?`<small>${vt(e)}</small>`:''}${e.side?'<span class="tag">Seitenwechsel</span>':''}${e.bb?'<span class="tag bb">Baseball</span>':''}${e.react?'<span class="tag">Ansage</span>':''}</div>`).join('')}</div>`}).join('');
+  return `<div class="card"><h3>${b.l}</h3><div class="t">${fmt(b.dur)} min · ${t}</div>${b.ex.map(e=>`<div class="ex" data-n="${e.n}">${figSVG(e.n,'th')}<b>${e.n}</b>${vt(e)?`<small>${vt(e)}</small>`:''}${e.side?'<span class="tag">Seitenwechsel</span>':''}${e.bb?'<span class="tag bb">Baseball</span>':''}${e.react?'<span class="tag">Ansage</span>':''}</div>`).join('')}</div>`}).join('');
 }
 function renderTrack(){
  $('#track').innerHTML=B.map((b,i)=>`<div class="tb" style="--w:${b.dur}"><i id="tb${i}"></i></div>`).join('');
@@ -293,7 +396,7 @@ function renderTrack(){
  $('#tot').textContent=fmt(S.total);
 }
 function renderNow(){
- const s=cur();
+ const s=cur();const fe=s.k==='work'?s.e:(s.nx&&s.nx.e);const fb=$('#fig');if(fe&&fb.dataset.n!==fe.n){fb.dataset.n=fe.n;fb.innerHTML=figSVG(fe.n,'main')}
  if(s.k==='work'){$('#blk').textContent=B[s.b].l;$('#name').textContent=s.e.n;const v=vt(s.e);$('#var').hidden=!v;$('#var').textContent=v?'Stufe: '+v:'';$('#hint').textContent=s.e.h;
   const n=S.segs[S.i+2];$('#next').textContent=n&&n.e?'Danach: '+n.e.n:'Letzte Übung';$('#arc').style.stroke='var(--clay)';$('#kind').textContent='Arbeit'}
  else{const n=s.nx;$('#blk').textContent=s.k==='prep'?'Start':B[n.b].l;$('#name').textContent=s.k==='prep'?'Bereit machen':'Pause';$('#var').hidden=true;
