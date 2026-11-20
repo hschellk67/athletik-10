@@ -131,6 +131,9 @@ svg.front .far polyline{stroke:var(--ink)}
 #bktx{height:auto;width:100%;padding:8px;margin:8px 0;display:block}
 .bk{margin-top:12px}.bk summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
 .btn:disabled{opacity:.6;cursor:default}
+.sub2{margin:10px 0 0;color:#fff;font-weight:600;min-height:0}.sub2:empty{display:none}
+.chip.add{display:inline-flex;align-items:center;text-decoration:none;border-style:dashed}
+#page{width:110px}
 @media(max-width:700px){.stage{grid-template-columns:minmax(0,1fr)}.ring{max-width:260px}.plan{grid-template-columns:minmax(0,1fr)}.now{text-align:center}.chkg{grid-template-columns:minmax(0,1fr)}.radar{margin:auto}.ct{font-size:13px}.figbox{margin-inline:auto}.ring{max-width:220px}.hint{margin-inline:auto}.btns{justify-content:center}}
 @media(prefers-reduced-motion:no-preference){#arc{transition:stroke-dashoffset .12s linear}}
 </style>
@@ -140,12 +143,14 @@ svg.front .far polyline{stroke:var(--ink)}
   <h1>Athletik 10</h1>
   <p class="sub">Athletik-Programm für Kinder und Jugendliche. 10 Minuten am Tag, ohne Geräte, im 6-Wochen-Aufbau.</p>
   <div class="ctrls">
+    <div class="grp"><label>Wer trainiert? Mehrere möglich</label><div class="chips" id="who"></div></div>
     <div class="grp"><label>Woche</label><div class="chips" id="weeks"></div></div>
     <div class="grp"><label>Tag</label><div class="chips" id="days"></div></div>
     <div class="grp"><label for="lvl">Stufe</label><select id="lvl"><option value="auto">Automatisch</option><option value="0">Leicht</option><option value="1">Normal</option><option value="2">Schwer</option></select></div>
     <div class="grp"><label>Ansage</label><button class="tog" id="voice" aria-pressed="true">Stimme an</button></div>
     <div class="grp"><label>Challenge</label><a class="tog lk" href="#fortschritt">Mein Fortschritt</a></div>
   </div>
+  <p class="sub2" id="whonote"></p>
 </div></header>
 
 <main class="band"><div class="wrap">
@@ -177,6 +182,7 @@ svg.front .far polyline{stroke:var(--ink)}
 
 <section class="band" style="padding-top:0"><div class="wrap">
   <h2 id="ptitle">Heute</h2>
+  <p class="next" id="plvl"></p>
   <div class="plan" id="plan"></div>
 </div></section>
 
@@ -190,8 +196,8 @@ svg.front .far polyline{stroke:var(--ink)}
   <h3 class="h3">Athletik-Check</h3>
   <p class="next">Fünf Tests für Kraft, Rumpf, Balance, Sprungkraft und Schnelligkeit, etwa 6 Minuten. Empfohlen in Woche 1, 3 und 5 und nach Woche 6, am besten ausgeruht statt nach dem Training.</p>
   <div id="chk"></div>
-  <div class="prow"><label for="prof"><b>Profil</b></label><select id="prof"></select><input id="pnew" placeholder="Name" maxlength="20" aria-label="Name für Profil"><button class="btn" id="padd">Neues Profil</button><button class="btn" id="pren">Umbenennen</button></div>
-  <p class="next">Mehrere Kinder an einem Gerät? Jedes bekommt ein eigenes Profil und sieht nur seine eigenen Werte.</p>
+  <div class="prow" id="profil"><label for="prof"><b>Profil</b></label><select id="prof"></select><input id="pnew" placeholder="Name" maxlength="20" aria-label="Name"><input id="page" type="number" inputmode="numeric" min="5" max="19" placeholder="Alter" aria-label="Alter in Jahren"><button class="btn" id="padd">Neues Profil</button><button class="btn" id="pren">Ändern</button><button class="btn" id="pdel">Profil löschen</button></div>
+  <p class="next">Mehrere Kinder an einem Gerät? Jedes bekommt ein eigenes Profil mit Namen und Alter und sieht nur seine eigenen Werte. Das Alter legt die automatische Stufe fest: unter 10 Jahren leichter, ab 13 früher schwer.</p>
   <details class="bk"><summary>Sicherung und Gerätewechsel</summary>
     <p class="next">Alle Werte bleiben nur auf diesem Gerät. Mit dem Sicherungscode nimmst du das aktuelle Profil auf ein anderes Gerät mit.</p>
     <button class="btn" id="bkcp">Sicherungscode kopieren</button>
@@ -382,12 +388,18 @@ let st={};try{st=JSON.parse(localStorage.getItem('ath10')||'{}')}catch(e){}
 if(!st.profiles){st.profiles={p1:{name:'Ich',week:st.week||1,lvl:st.lvl||'auto',done:st.done||{},days:{},daily:{},checks:[]}};st.cur='p1';delete st.week;delete st.lvl;delete st.done}
 if(!st.profiles[st.cur])st.cur=Object.keys(st.profiles)[0];
 const me=()=>st.profiles[st.cur];
+st.sel=(st.sel||[st.cur]).filter(id=>st.profiles[id]);if(!st.sel.length)st.sel=[st.cur];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const parts=()=>st.sel.map(id=>st.profiles[id]).filter(Boolean);
+const ageOf=p=>p&&p.age?p.age+Math.floor((Date.now()-(p.ageSet||Date.now()))/31557600000):null;
 const track=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:n,title:n,event:true})}catch(e){}};
 const save=()=>{try{localStorage.setItem('ath10',JSON.stringify(st))}catch(e){}};
 let week=me().week||1,lvlSel=me().lvl||'auto',voice=st.voice!==false;
 let day=(()=>{const d=new Date().getDay();return d>=1&&d<=5?d-1:0})();
 const phase=()=>PH[week<=2?0:week<=4?1:2];
-const lvl=()=>lvlSel==='auto'?phase().lvl:+lvlSel;
+const phIdx=()=>week<=2?0:week<=4?1:2;
+const autoLvl=()=>{const a=ageOf(me());return(a==null?[1,1,2]:a<=9?[0,0,1]:a<=12?[1,1,2]:[1,2,2])[phIdx()]};
+const lvl=()=>lvlSel==='auto'?autoLvl():+lvlSel;
 const vt=e=>e&&e.v?e.v[lvl()]:'';
 const fmt=s=>Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0');
 let S,B,timer=null,actx=null,wake=null,lastT=0,nextCmd=0,deVoice=null;
@@ -426,7 +438,7 @@ function advance(){
 function finish(){
  stop();S.fin=true;S.rem=0;beep(660,.25);setTimeout(()=>beep(990,.6),250);
  say('Geschafft! Zehn Minuten stark trainiert.',true);
- me().done[week+'-'+day]=1;me().days[today()]='t';save();renderProg();track('training-fertig-'+DAYS[day].s+'-w'+week);renderAll();
+ parts().forEach(p=>{p.done[(p===me()?week:(p.week||1))+'-'+day]=1;p.days[today()]='t'});save();renderProg();track('training-fertig-'+DAYS[day].s+'-w'+week);renderAll();
  $('#name').textContent='Geschafft!';$('#blk').textContent=DAYS[day].n+' erledigt';$('#hint').textContent='Gut gemacht. Jetzt noch die Challenge des Tages? Dauert nur eine Minute.';$('#var').hidden=true;$('#next').textContent='';$('#go').textContent='Nochmal';
 }
 function tick(){
@@ -459,7 +471,14 @@ const setVoice=()=>{const b=$('#voice');b.setAttribute('aria-pressed',voice);b.t
 $('#voice').onclick=()=>{voice=!voice;st.voice=voice;save();setVoice();if(!voice)try{speechSynthesis.cancel()}catch(e){}};
 setVoice();
 
-function renderChips(){
+function renderWho(){
+ $('#who').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<button class="chip who" data-p="${id}" aria-pressed="${st.sel.includes(id)}">${esc(p.name)}</button>`).join('')+'<a class="chip who add" href="#profil" aria-label="Kind hinzufügen">+ Kind</a>';
+ document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const id=b.dataset.p,on=st.sel.includes(id);
+  if(on){if(st.sel.length===1)return;st.sel=st.sel.filter(x=>x!==id);if(st.cur===id)st.cur=st.sel[0]}else{st.sel.push(id);st.cur=id}
+  save();week=me().week||1;lvlSel=me().lvl||'auto';$('#lvl').value=lvlSel;build();renderProg()});
+ const P=parts();$('#whonote').textContent=P.length>1?`Gemeinsames Training: ${P.map(p=>p.name).join(', ')}. Woche und Stufe von ${me().name}, jedes Kind darf eine leichtere Variante wählen. Das Training wird bei allen eingetragen.`:'';
+}
+function renderChips(){renderWho();
  $('#weeks').innerHTML=[1,2,3,4,5,6].map(w=>{const n=[0,1,2,3,4].filter(d=>me().done[w+'-'+d]).length;return `<button class="chip${n===5?' done':''}" data-w="${w}" aria-pressed="${w===week}" title="${n} von 5 Tagen">${w}</button>`}).join('');
  $('#days').innerHTML=DAYS.map((d,i)=>`<button class="chip${me().done[week+'-'+i]?' done':''}" data-d="${i}" aria-pressed="${i===day}">${d.s}</button>`).join('');
  document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{week=+b.dataset.w;me().week=week;save();build()});
@@ -467,7 +486,7 @@ function renderChips(){
 }
 function renderPlan(){
  const D=DAYS[day],P=phase();
- $('#ptitle').textContent=`${D.n}: ${D.t} · Woche ${week} (${P.name})`;
+ const a=ageOf(me());$('#ptitle').textContent=`${D.n}: ${D.t} · Woche ${week} (${P.name})`;$('#plvl').textContent=`Stufe ${['Leicht','Normal','Schwer'][lvl()]}${lvlSel==='auto'?' (automatisch'+(a?', '+a+' Jahre':'')+')':''} für ${me().name}`;
  $('#plan').innerHTML=B.map((b,bi)=>{
   const t=b.m==='seq'?`${b.ex.length} × ${b.t[0]} s, ${b.t[1]} s Pause`:`${b.r} Runden im Wechsel · ${b.t[0]} s / ${b.t[1]} s Pause`;
   return `<div class="card"><h3>${b.l}</h3><div class="t">${fmt(b.dur)} min · ${t}</div>${b.ex.map(e=>`<div class="ex" data-n="${e.n}">${figSVG(e.n,'th')}<b>${e.n}</b>${vt(e)?`<small>${vt(e)}</small>`:''}${e.side?'<span class="tag">Seitenwechsel</span>':''}${e.bb?'<span class="tag bb">Baseball</span>':''}${e.react?'<span class="tag">Ansage</span>':''}</div>`).join('')}</div>`}).join('');
@@ -512,7 +531,6 @@ const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+Stri
 const today=()=>key(new Date());
 const deDate=s=>s.split('-').reverse().join('.');
 const dBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const fmtV=(v,T)=>v==null?'–':T.t==='r'?v+' Wdh.':T.t==='n'?String(v).replace('.',',')+' Fußl.':(Math.round(v*10)/10).toFixed(1).replace('.',',')+' s';
 const better=(a,b,T)=>T.low?a<b:a>b;
 const bestOf=(arr,T)=>arr.reduce((m,x)=>m==null||better(x,m,T)?x:m,null);
@@ -552,27 +570,32 @@ function input(T,start,cb){
  $('#ovb').innerHTML='<button class="btn go" id="ovsv">Speichern</button>';
  $('#ovsv').onclick=()=>cb(Math.max(0,+String($('#ovv').value).replace(',','.')||0));
 }
-function showResult(T,v,prev,next){
+function showResult(T,v,prev,next,who){
  clearInterval(ot);const b=bestOf(prev,T),l=prev[prev.length-1],rec=prev.length&&better(v,b,T);
  $('#ovn').textContent=fmtV(v,T);$('#ovin').innerHTML='';$('#ovf').innerHTML='';$('#ovd').textContent='';
- $('#ovt').textContent=rec?'Neuer Rekord!':T.n;
+ $('#ovt').textContent=(rec?'Neuer Rekord!':T.n)+(who?' ('+who+')':'');if(who)$('#ovk').textContent=who;
  $('#ovm').textContent=!prev.length?'Erster Wert gespeichert. Ab jetzt trittst du gegen diese Zahl an.':rec?`Bisheriger Rekord: ${fmtV(b,T)}.`:`Letztes Mal: ${fmtV(l,T)}. Dein Rekord: ${fmtV(b,T)}.`;
  if(rec){say('Neuer Rekord!',true);beep(660,.2);setTimeout(()=>beep(990,.5),220)}
- $('#ovb').innerHTML=next?'<button class="btn go" id="ovnx">Weiter</button>':'<button class="btn go" id="ovok">Fertig</button>';
+ $('#ovb').innerHTML=next?'<button class="btn go" id="ovnx">'+(who?'Nächstes Kind':'Weiter')+'</button>':'<button class="btn go" id="ovok">Fertig</button>';
  if(next)$('#ovnx').onclick=next;else $('#ovok').onclick=()=>ovShow(false);
 }
-function startDaily(){const T=DCH[day],m=me(),h=m.daily[T.id]||(m.daily[T.id]=[]);
- runTest(T,`Challenge des Tages (${DAYS[day].n})`,h,v=>{const prev=h.map(x=>x.v);h.push({d:today(),w:week,v});save();track('challenge-'+T.id);showResult(T,v,prev);renderProg()})}
-function startCheck(){const res={},m=me();let i=0;
- const step=()=>{if(i>=CHK.length){m.checks.push({d:today(),w:week,v:res});save();track('athletik-check');renderProg();checkDone();return}
+function startDaily(){const ids=st.sel.slice(),T=DCH[day],multi=ids.length>1;let i=0;
+ const next=()=>{if(i>=ids.length)return;const p=st.profiles[ids[i++]],h=p.daily[T.id]||(p.daily[T.id]=[]);
+  if(multi)say('Jetzt '+p.name,true);
+  runTest(T,multi?`Challenge des Tages: jetzt ${p.name}`:`Challenge des Tages (${DAYS[day].n})`,h,v=>{const prev=h.map(x=>x.v);h.push({d:today(),w:p.week||1,v});save();track('challenge-'+T.id);showResult(T,v,prev,i<ids.length?next:null,multi?p.name:'');renderProg()})};
+ next()}
+function startCheck(){const ids=st.sel.slice(),multi=ids.length>1;let k=0;
+ const nextP=()=>{if(k>=ids.length)return;checkFor(st.profiles[ids[k++]],multi,k<ids.length?nextP:null)};nextP()}
+function checkFor(m,multi,after){const res={};let i=0;if(multi)say('Athletik-Check. Jetzt '+m.name,true);
+ const step=()=>{if(i>=CHK.length){m.checks.push({d:today(),w:m.week||1,v:res});save();track('athletik-check');renderProg();checkDone(m,after);return}
   const T=CHK[i],prev=m.checks.map(c=>c.v[T.id]).filter(x=>x!=null);
-  runTest(T,`Athletik-Check ${i+1} von ${CHK.length}: ${T.l}`,prev.map(v=>({v})),v=>{res[T.id]=v;i++;showResult(T,v,prev,step)})};
+  runTest(T,`${multi?m.name+': ':''}Athletik-Check ${i+1} von ${CHK.length}: ${T.l}`,prev.map(v=>({v})),v=>{res[T.id]=v;i++;showResult(T,v,prev,step)})};
  step()}
-function checkDone(){const n=me().checks.length;
- $('#ovk').textContent='Athletik-Check';$('#ovt').textContent='Check gespeichert';$('#ovn').textContent='';$('#ovf').innerHTML=radar();$('#ovd').textContent='';
+function checkDone(m,after){const n=m.checks.length;
+ $('#ovk').textContent='Athletik-Check';$('#ovt').textContent='Check gespeichert';$('#ovn').textContent='';$('#ovt').textContent='Check gespeichert: '+m.name;$('#ovf').innerHTML=radar(m);$('#ovd').textContent='';
  $('#ovm').textContent=n>1?'Orange: dein Check von heute. Gestrichelt: dein erster Check.':'Das ist deine Ausgangslinie. Beim nächsten Check siehst du hier den Vergleich.';
- $('#ovin').innerHTML='';$('#ovb').innerHTML='<button class="btn go" id="ovok">Fertig</button>';$('#ovok').onclick=()=>ovShow(false)}
-function radar(){const C=me().checks;if(!C.length)return'';const f=C[0].v,c=C[C.length-1].v,n=CHK.length,cx=160,cy=138,R=92;
+ $('#ovin').innerHTML='';$('#ovb').innerHTML=after?'<button class="btn go" id="ovok">Nächstes Kind</button>':'<button class="btn go" id="ovok">Fertig</button>';$('#ovok').onclick=after||(()=>ovShow(false))}
+function radar(m=me()){const C=m.checks;if(!C.length)return'';const f=C[0].v,c=C[C.length-1].v,n=CHK.length,cx=160,cy=138,R=92;
  const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[cx+Math.cos(a)*R*r,cy+Math.sin(a)*R*r]};
  const sc=(T,v)=>{const r=f[T.id];if(!r||!v)return .6;return Math.max(.08,Math.min(1,.6*(T.low?r/v:v/r)))};
  const poly=fn=>CHK.map((T,i)=>pt(i,fn(T)).map(x=>x.toFixed(1)).join(',')).join(' ');
@@ -590,7 +613,7 @@ function spark(vals,T){if(vals.length<2)return'';const w=220,h=50,mn=Math.min(..
 function streak(){const D=me().days,d=new Date();let n=0;if(!D[key(d)])d.setDate(d.getDate()-1);
  for(let i=0;i<500;i++){const k=key(d),wd=d.getDay();if(D[k]){if(D[k]==='t')n++}else if(wd!==0&&wd!==6)break;d.setDate(d.getDate()-1)}return n}
 function renderProg(){const m=me(),td=today();
- $('#pname').textContent=m.name;
+ const ag=ageOf(m);$('#pname').textContent=m.name+(ag?' ('+ag+')':'');$('#page').placeholder=ag?'Alter: '+ag:'Alter';$('#pdel').hidden=Object.keys(st.profiles).length<2;$('#pdel').textContent='Profil löschen';$('#pdel').dataset.c='';
  $('#prof').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<option value="${id}"${id===st.cur?' selected':''}>${esc(p.name)}</option>`).join('');
  $('#streak').textContent=streak();
  $('#pause').textContent=m.days[td]==='t'?'Heute trainiert':m.days[td]==='p'?'Pause-Tag zurücknehmen':'Heute Pause (Spiel oder krank)';
@@ -604,11 +627,14 @@ function renderProg(){const m=me(),td=today();
 }
 $('#chal').onclick=startDaily;$('#chal2').onclick=startDaily;
 $('#pause').onclick=()=>{const m=me(),td=today();if(m.days[td]==='p')delete m.days[td];else if(!m.days[td])m.days[td]='p';save();renderProg()};
-const newProf=name=>({name,week:1,lvl:'auto',done:{},days:{},daily:{},checks:[]});
-const switchProf=id=>{st.cur=id;save();week=me().week||1;lvlSel=me().lvl||'auto';$('#lvl').value=lvlSel;build();renderProg()};
+const newProf=(name,age)=>({name,age:age||null,ageSet:Date.now(),week:1,lvl:'auto',done:{},days:{},daily:{},checks:[]});
+const ageIn=()=>{const a=Math.round(+$('#page').value);return a>=4&&a<=25?a:null};
+const switchProf=id=>{st.cur=id;if(!st.sel.includes(id))st.sel=[id];save();week=me().week||1;lvlSel=me().lvl||'auto';$('#lvl').value=lvlSel;build();renderProg()};
 $('#prof').onchange=e=>switchProf(e.target.value);
-$('#padd').onclick=()=>{const n=$('#pnew').value.trim();if(!n){$('#pnew').focus();return}const id='p'+Date.now();st.profiles[id]=newProf(n);$('#pnew').value='';switchProf(id)};
-$('#pren').onclick=()=>{const n=$('#pnew').value.trim();if(!n){$('#pnew').focus();return}me().name=n;$('#pnew').value='';save();renderProg()};
+$('#padd').onclick=()=>{const n=$('#pnew').value.trim();if(!n){$('#pnew').focus();return}const id='p'+Date.now();st.profiles[id]=newProf(n,ageIn());$('#pnew').value='';$('#page').value='';switchProf(id)};
+$('#pren').onclick=()=>{const n=$('#pnew').value.trim(),a=ageIn();if(!n&&!a){$('#pnew').focus();return}if(n)me().name=n;if(a){me().age=a;me().ageSet=Date.now()}$('#pnew').value='';$('#page').value='';save();build();renderProg()};
+$('#pdel').onclick=()=>{const b=$('#pdel');if(Object.keys(st.profiles).length<2)return;if(!b.dataset.c){b.dataset.c='1';b.textContent=`Wirklich „${me().name}“ löschen? Nochmal tippen`;return}
+ const id=st.cur;delete st.profiles[id];st.sel=st.sel.filter(x=>x!==id);const nid=st.sel[0]||Object.keys(st.profiles)[0];if(!st.sel.length)st.sel=[nid];switchProf(nid)};
 $('#bkcp').onclick=()=>{const code=btoa(unescape(encodeURIComponent(JSON.stringify(me()))));
  const ok=()=>$('#bkmsg').textContent='Sicherungscode kopiert. Auf dem anderen Gerät einfügen und „Code laden“ tippen.';
  const fb=()=>{$('#bktx').value=code;$('#bktx').select();$('#bkmsg').textContent='Der Code steht im Feld. Bitte markieren und kopieren.'};
