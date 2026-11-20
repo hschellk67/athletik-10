@@ -161,6 +161,7 @@ svg.front .far polyline{stroke:var(--ink)}
     <li><b>Stufen:</b> Woche 1–2 Technik mit längeren Pausen, Woche 3–4 mehr Tempo, Woche 5–6 schwere Varianten. Danach wieder ab Woche 3 starten.</li>
     <li><b>Schmerzen</b> an Knie, Ferse, Schulter oder Ellbogen: Training pausieren und ärztlich abklären lassen.</li>
   </ul>
+  <p class="foot">Datenschutz: Die Seite zählt Aufrufe anonym mit GoatCounter, ohne Cookies und ohne personenbezogene Daten. Der Trainingsfortschritt bleibt nur in diesem Browser gespeichert.</p>
   <p class="foot">Die Ansage nutzt die deutsche Stimme des Geräts. Am Handy den Lautlos-Schalter aus- und die Lautstärke hochstellen.</p>
 </div></section>
 
@@ -315,6 +316,7 @@ const PH=[{name:'Technik',lvl:1,spd:[12,18],kr:[40,20],fin:[15,15]},{name:'Tempo
 const CMDS=['Links','Rechts','Vor','Zurück','Links','Rechts'];
 let st={};try{st=JSON.parse(localStorage.getItem('ath10')||'{}')}catch(e){}
 st.done=st.done||{};
+const track=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:n,title:n,event:true})}catch(e){}};
 const save=()=>{try{localStorage.setItem('ath10',JSON.stringify(st))}catch(e){}};
 let week=st.week||1,lvlSel=st.lvl||'auto',voice=st.voice!==false;
 let day=(()=>{const d=new Date().getDay();return d>=1&&d<=5?d-1:0})();
@@ -358,7 +360,7 @@ function advance(){
 function finish(){
  stop();S.fin=true;S.rem=0;beep(660,.25);setTimeout(()=>beep(990,.6),250);
  say('Geschafft! Zehn Minuten stark trainiert.',true);
- st.done[week+'-'+day]=1;save();renderAll();
+ st.done[week+'-'+day]=1;save();track('training-fertig-'+DAYS[day].s+'-w'+week);renderAll();
  $('#name').textContent='Geschafft!';$('#blk').textContent=DAYS[day].n+' erledigt';$('#hint').textContent='Gut gemacht. Jetzt kurz lockern und genug trinken.';$('#var').hidden=true;$('#next').textContent='';$('#go').textContent='Nochmal';
 }
 function tick(){
@@ -378,7 +380,7 @@ async function start(){
  try{actx&&actx.resume()}catch(e){}
  try{if(navigator.wakeLock)wake=await navigator.wakeLock.request('screen')}catch(e){}
  S.run=true;lastT=performance.now();
- if(!S.entered){S.entered=true;enter()}
+ if(!S.entered){S.entered=true;track('training-start-'+DAYS[day].s+'-w'+week);enter()}
  timer=setInterval(tick,100);$('#go').textContent='Pause';
 }
 $('#go').onclick=()=>{if(S.run){stop();$('#go').textContent='Weiter';try{speechSynthesis.cancel()}catch(e){}}else start()};
@@ -430,5 +432,6 @@ function renderAll(){renderChips();renderPlan();renderTrack();renderNow();render
 build();
 }
 </script>
+<script data-goatcounter="https://hschellk.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
