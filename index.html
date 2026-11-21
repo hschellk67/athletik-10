@@ -222,10 +222,11 @@ svg.front .far polyline{stroke:var(--ink)}
   <h2>Regeln vom Trainer</h2>
   <ul class="notes">
     <li><b>Technik vor Tempo.</b> Wird die Ausführung unsauber, die Übung ruhig beenden. Lieber weniger, dafür sauber.</li>
-    <li><b>Leise landen.</b> Knie zeigen über die Füße und knicken nie nach innen. Sprungtage sind Mo, Mi und Fr, Di und Do bleiben sprungarm.</li>
+    <li><b>Leise landen.</b> Knie zeigen über die Füße und knicken nie nach innen. Sprungtage sind Mo, Mi und Fr. Di, Do und Sa bleiben sprungarm, So ganz ohne Sprünge.</li>
     <li><b>Vereinstraining oder Spiel am selben Tag:</b> nur Aktivierung und Schnelligkeit, Finisher weglassen. Am Tag nach einem Pitching-Einsatz keine Push-ups, Y-T-W nur locker.</li>
     <li><b>Abends</b> mindestens eine Stunde Abstand zum Schlafengehen. <b>Morgens</b> die Aktivierung bewusst ruhig angehen.</li>
-    <li><b>Wochenende frei:</b> draußen spielen, werfen, rennen. Das zählt mehr als jede Übung.</li>
+    <li><b>Wochenende:</b> Samstag Spiel und Koordination, Sonntag Mobilität und Regeneration, beides bewusst locker. Bei einem Spiel oder Turnier am Wochenende den Pause-Button nehmen oder nur die Sonntagseinheit machen.</li>
+    <li><b>Draußen spielen, werfen, rennen</b> zählt mehr als jede Übung. Die 10 Minuten ergänzen das, sie ersetzen es nicht.</li>
     <li><b>Stufen:</b> Woche 1–2 Technik mit längeren Pausen, Woche 3–4 mehr Tempo, Woche 5–6 schwere Varianten. Danach wieder ab Woche 3 starten.</li>
     <li><b>Challenge:</b> Nur saubere Wiederholungen zählen. Ein schlechterer Wert ist normal, etwa nach einem langen Tag. Entscheidend ist die Kurve über Wochen.</li>
     <li><b>Schmerzen</b> an Knie, Ferse, Schulter oder Ellbogen: Training pausieren und ärztlich abklären lassen.</li>
@@ -279,6 +280,11 @@ const POSE={
 'Plank Jacks':{a:HP,b:[115,-58,-58,-72,-72,0,0,0,0,3],sp:.8},
 'Flutter Kicks':{a:[-100,105,105,95,95,90,90,90,90],b:[-100,95,95,105,105,90,90,90,90],sp:.6},
 'Plank March':{a:FP,b:HP,sp:2},
+'Armkreisen':{a:[180,0,0,0,0,-20,-20,160,160],b:[180,0,0,0,0,340,340,520,520],sp:3.2},
+'Beinpendel':{a:[180,70,70,0,0,0,0,90,90],b:[180,-35,-35,0,0,0,0,90,90],sp:1.6},
+'Weltbeste Dehnung':{a:[70,82,-5,-62,-62,0,0,0,0],b:[95,82,-5,-62,-62,180,180,0,0],sp:3.5},
+'Katze-Kuh':{a:[103,0,-90,0,-90,0,0,0,0],b:[113,0,-90,0,-90,0,0,0,0],sp:4},
+'Tiefe Hocke':{a:[148,92,-30,92,-30,90,90,90,90],b:[154,94,-28,94,-28,95,95,95,95],sp:4},
 'Unterarmstütz':{a:FP,b:[103,-77,-77,-77,-77,0,90,0,90],sp:3},
 'Einbeinstand mit Rotation':{a:[180,90,0,0,0,70,120,70,120],b:[180,90,0,0,0,110,150,40,90],sp:3},
 'Reaktions-Drill':{a:[180,25,5,-25,-5,25,70,-25,-70],b:[180,35,5,-15,-5,25,70,-25,-70,0,20],fr:1,sp:1.1},
@@ -380,7 +386,27 @@ const DAYS=[
   {n:'Wadenheben',h:'Langsam hoch und runter, mit einer Hand an der Wand.',v:['beidbeinig','einbeinig, Wechsel zur Halbzeit','einbeinig, oben 2 s']},
   {n:'Holzhacker',h:'Hände gefaltet, diagonal von oben nach unten ziehen, die Hüfte dreht mit.',side:1,bb:1}],
  fin:[{n:'Jump Lunges',h:'Wechselsprung im Ausfallschritt, kontrolliert landen.',v:['Ausfallschritte ohne Sprung','Wechselsprung','Wechselsprung, unten kurz halten']},
-  {n:'Jumping Jacks',h:'Locker und rhythmisch.'}]}
+  {n:'Jumping Jacks',h:'Locker und rhythmisch.'}]},
+ {n:'Samstag',s:'Sa',t:'Spiel & Koordination',akt:[
+  {n:'Armkreisen',h:'Arme groß und locker kreisen, erst vorwärts, dann rückwärts. Schultern bleiben unten.'},
+  {n:'Inchworm',h:'Mit den Händen nach vorn laufen, im Brett kurz halten, zurücklaufen. Knie möglichst gestreckt.'}],
+ spd:[{n:'Reaktions-Drill',h:'Ready Position. Auf Ansage sofort zwei schnelle Schritte in die Richtung, dann zurück.',react:1},
+  {n:'Quick Feet',h:'Mini-Schritte auf der Stelle, so schnell wie möglich, Oberkörper ruhig.'}],
+ kraft:[{n:'Bear Crawl',h:'Knie knapp über dem Boden, vor und zurück krabbeln. Rücken flach wie ein Tisch.'},
+  {n:'Wall Sit',h:'Rücken an der Wand, Oberschenkel waagrecht.',v:['etwas höher','waagrecht','einbeinig im Wechsel']},
+  {n:'Superman-Hold',h:'Bauchlage, Arme und Beine leicht abheben, Blick zum Boden.'}],
+ fin:[{n:'Jumping Jacks',h:'Locker und rhythmisch.',v:['ohne Sprung, seitlich tippen','locker springen','schnell springen']},
+  {n:'Mountain Climbers',h:'Hüfte unten, Knie zügig zur Brust.'}]},
+ {n:'Sonntag',s:'So',t:'Mobilität & Regeneration',bl:['Mobilität','Balance','Beweglichkeit','Ausklang'],akt:[
+  {n:'Armkreisen',h:'Arme groß und locker kreisen, erst vorwärts, dann rückwärts.'},
+  {n:'Beinpendel',h:'Mit einer Hand an der Wand. Bein locker vor und zurück schwingen, Oberkörper bleibt ruhig.',side:1}],
+ spd:[{n:'Einbeinstand mit Rotation',h:'Auf einem Bein stehen, Oberkörper langsam nach links und rechts drehen.',side:1},
+  {n:'Standwaage',h:'Oberkörper und freies Bein bilden eine Linie. Ruhig atmen.'}],
+ kraft:[{n:'Weltbeste Dehnung',h:'Großer Ausfallschritt, beide Hände innen am Boden. Dann den vorderen Arm zur Decke drehen und nachschauen.',side:1},
+  {n:'Glute Bridge',h:'Hüfte langsam hoch, oben zwei Sekunden halten, langsam ablegen.'},
+  {n:'Bird Dog',h:'Im Vierfüßler Arm und Gegenbein strecken, drei Sekunden halten, wechseln.'}],
+ fin:[{n:'Katze-Kuh',h:'Im Vierfüßler einatmen und den Rücken durchhängen lassen, ausatmen und rund machen. Langsam.'},
+  {n:'Tiefe Hocke',h:'Füße hüftbreit, Fersen bleiben am Boden, Ellbogen schieben die Knie sanft nach außen. Ruhig atmen.'}]}
 ];
 const PH=[{name:'Technik',lvl:1,spd:[12,18],kr:[40,20],fin:[15,15]},{name:'Tempo',lvl:1,spd:[15,15],kr:[45,15],fin:[20,10]},{name:'Power',lvl:2,spd:[15,15],kr:[45,15],fin:[20,10]}];
 const CMDS=['Links','Rechts','Vor','Zurück','Links','Rechts'];
@@ -395,7 +421,7 @@ const ageOf=p=>p&&p.age?p.age+Math.floor((Date.now()-(p.ageSet||Date.now()))/315
 const track=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:n,title:n,event:true})}catch(e){}};
 const save=()=>{try{localStorage.setItem('ath10',JSON.stringify(st))}catch(e){}};
 let week=me().week||1,lvlSel=me().lvl||'auto',voice=st.voice!==false;
-let day=(()=>{const d=new Date().getDay();return d>=1&&d<=5?d-1:0})();
+let day=(new Date().getDay()+6)%7;
 const phase=()=>PH[week<=2?0:week<=4?1:2];
 const phIdx=()=>week<=2?0:week<=4?1:2;
 const autoLvl=()=>{const a=ageOf(me());return(a==null?[1,1,2]:a<=9?[0,0,1]:a<=12?[1,1,2]:[1,2,2])[phIdx()]};
@@ -411,7 +437,8 @@ function beep(f,d){if(!actx)return;try{const o=actx.createOscillator(),g=actx.cr
 
 function build(){
  const D=DAYS[day],P=phase();
- B=[{l:'Aktivierung',ex:D.akt,m:'seq',t:[50,10]},{l:'Schnelligkeit',ex:D.spd,m:'alt',r:4,t:P.spd},{l:'Kraft',ex:D.kraft,m:'seq',t:P.kr},{l:'Finisher',ex:D.fin,m:'alt',r:6,t:P.fin}];
+ const BL=D.bl||['Aktivierung','Schnelligkeit','Kraft','Finisher'];
+ B=[{l:BL[0],ex:D.akt,m:'seq',t:[50,10]},{l:BL[1],ex:D.spd,m:'alt',r:4,t:P.spd},{l:BL[2],ex:D.kraft,m:'seq',t:P.kr},{l:BL[3],ex:D.fin,m:'alt',r:6,t:P.fin}];
  const segs=[{k:'prep',d:10,b:-1}];
  B.forEach((b,bi)=>{const list=b.m==='seq'?b.ex:Array.from({length:b.r},(_,i)=>b.ex[i%2]);
   list.forEach((e,i)=>{segs.push({k:'work',d:b.t[0],e,b:bi,first:b.m==='seq'||i<2});segs.push({k:'rest',d:b.t[1],b:bi})})});
@@ -479,7 +506,7 @@ function renderWho(){
  const P=parts();$('#whonote').textContent=P.length>1?`Gemeinsames Training: ${P.map(p=>p.name).join(', ')}. Woche und Stufe von ${me().name}, jedes Kind darf eine leichtere Variante wählen. Das Training wird bei allen eingetragen.`:'';
 }
 function renderChips(){renderWho();
- $('#weeks').innerHTML=[1,2,3,4,5,6].map(w=>{const n=[0,1,2,3,4].filter(d=>me().done[w+'-'+d]).length;return `<button class="chip${n===5?' done':''}" data-w="${w}" aria-pressed="${w===week}" title="${n} von 5 Tagen">${w}</button>`}).join('');
+ $('#weeks').innerHTML=[1,2,3,4,5,6].map(w=>{const n=DAYS.filter((_,d)=>me().done[w+'-'+d]).length;return `<button class="chip${n===7?' done':''}" data-w="${w}" aria-pressed="${w===week}" title="${n} von 7 Tagen">${w}</button>`}).join('');
  $('#days').innerHTML=DAYS.map((d,i)=>`<button class="chip${me().done[week+'-'+i]?' done':''}" data-d="${i}" aria-pressed="${i===day}">${d.s}</button>`).join('');
  document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{week=+b.dataset.w;me().week=week;save();build()});
  document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{day=+b.dataset.d;build();renderProg()});
@@ -520,7 +547,9 @@ const DCH=[
  {id:'di',n:'Unterarmstütz halten',fig:'Unterarmstütz',t:'h',txt:'So lange halten, bis die Hüfte durchhängt oder hochgeht. Dann sofort Stopp tippen.'},
  {id:'mi',n:'Squat Jumps',fig:'Squat Jumps',t:'r',dur:30,txt:'30 Sekunden: tief rein, explosiv hoch, leise landen. Nur saubere Sprünge zählen.'},
  {id:'do',n:'Einbeinstand, Augen zu',fig:'Einbeinstand',t:'h',txt:'Immer dasselbe Standbein. Stopp tippen, sobald die Augen aufgehen oder der zweite Fuß den Boden berührt.'},
- {id:'fr',n:'Burpees',fig:'Burpees',t:'r',dur:30,txt:'30 Sekunden: so viele saubere Burpees wie möglich, mit Sprung.'}];
+ {id:'fr',n:'Burpees',fig:'Burpees',t:'r',dur:30,txt:'30 Sekunden: so viele saubere Burpees wie möglich, mit Sprung.'},
+ {id:'sa',n:'Wall Sit halten',fig:'Wall Sit',t:'h',txt:'Rücken an der Wand, Oberschenkel waagrecht. Stopp tippen, sobald du hochkommst oder die Position nicht mehr hältst.'},
+ {id:'so',n:'Tiefe Hocke halten',fig:'Tiefe Hocke',t:'h',txt:'Füße hüftbreit, Fersen am Boden, Brust aufrecht. Stopp tippen, sobald die Fersen abheben. Höchstens zwei Minuten.'}];
 const CHK=[
  {id:'kraft',l:'Kraft',n:'Push-ups in 60 s',fig:'Push-ups',t:'r',dur:60,txt:'60 Sekunden: so viele saubere Push-ups wie möglich. Pausen sind erlaubt, die Zeit läuft weiter.'},
  {id:'rumpf',l:'Rumpf',n:'Unterarmstütz halten',fig:'Unterarmstütz',t:'h',txt:'So lange halten, bis die Hüfte durchhängt oder hochgeht. Dann Stopp tippen.'},
@@ -611,12 +640,12 @@ function spark(vals,T){if(vals.length<2)return'';const w=220,h=50,mn=Math.min(..
  const xs=i=>8+i*(w-16)/(vals.length-1),ys=v=>T.low?8+(v-mn)/rg*(h-16):h-8-(v-mn)/rg*(h-16);
  return `<svg class="spk" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline points="${vals.map((v,i)=>xs(i).toFixed(1)+','+ys(v).toFixed(1)).join(' ')}" fill="none" stroke="var(--grass2)" stroke-width="3" stroke-linejoin="round"/><circle cx="${xs(vals.length-1).toFixed(1)}" cy="${ys(vals[vals.length-1]).toFixed(1)}" r="5" fill="var(--clay)"/></svg>`}
 function streak(){const D=me().days,d=new Date();let n=0;if(!D[key(d)])d.setDate(d.getDate()-1);
- for(let i=0;i<500;i++){const k=key(d),wd=d.getDay();if(D[k]){if(D[k]==='t')n++}else if(wd!==0&&wd!==6)break;d.setDate(d.getDate()-1)}return n}
+ for(let i=0;i<500;i++){const k=key(d),wd=d.getDay();if(D[k]){if(D[k]==='t')n++}else break;d.setDate(d.getDate()-1)}return n}
 function renderProg(){const m=me(),td=today();
  const ag=ageOf(m);$('#pname').textContent=m.name+(ag?' ('+ag+')':'');$('#page').placeholder=ag?'Alter: '+ag:'Alter';$('#pdel').hidden=Object.keys(st.profiles).length<2;$('#pdel').textContent='Profil löschen';$('#pdel').dataset.c='';
  $('#prof').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<option value="${id}"${id===st.cur?' selected':''}>${esc(p.name)}</option>`).join('');
  $('#streak').textContent=streak();
- $('#pause').textContent=m.days[td]==='t'?'Heute trainiert':m.days[td]==='p'?'Pause-Tag zurücknehmen':'Heute Pause (Spiel oder krank)';
+ $('#pause').textContent=m.days[td]==='t'?'Heute trainiert':m.days[td]==='p'?'Pause-Tag zurücknehmen':'Heute Pause (Spiel, Turnier oder krank)';
  $('#pause').disabled=m.days[td]==='t';
  $('#chal').textContent=$('#chal2').textContent='Challenge: '+DCH[day].n;
  $('#dch').innerHTML=DCH.map((T,i)=>{const v=(m.daily[T.id]||[]).map(x=>x.v),b=bestOf(v,T);
