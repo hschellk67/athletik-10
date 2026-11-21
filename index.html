@@ -432,7 +432,9 @@ let S,B,timer=null,actx=null,wake=null,lastT=0,nextCmd=0,deVoice=null;
 
 function pickVoice(){const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de/i.test(x.lang))||null}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t,cut){if(!voice||!('speechSynthesis' in window))return;try{if(cut)speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(deVoice)u.voice=deVoice;u.rate=1.02;speechSynthesis.speak(u)}catch(e){}}
+function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis,u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(deVoice)u.voice=deVoice;u.rate=1.02;
+ if(cut&&(ss.speaking||ss.pending)){ss.cancel();setTimeout(()=>{try{ss.speak(u)}catch(e){}},90)}else{if(ss.paused)ss.resume();ss.speak(u)}}catch(e){}}
+const busy=()=>{try{return speechSynthesis.speaking||speechSynthesis.pending}catch(e){return false}};
 function beep(f,d){if(!actx)return;try{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.connect(g);g.connect(actx.destination);const n=actx.currentTime;g.gain.setValueAtTime(.25,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.start(n);o.stop(n+d)}catch(e){}}
 
 function build(){
@@ -452,7 +454,7 @@ function stop(){clearInterval(timer);timer=null;if(S)S.run=false;if(wake){try{wa
 const cur=()=>S.segs[S.i];
 function enter(){
  const s=cur();$('#cmd').textContent='';
- if(s.k==='work'){beep(880,.45);if(s.e.react)nextCmd=performance.now()+1500;}
+ if(s.k==='work'){beep(880,.45);if(s.e.react)nextCmd=performance.now()+2500;if(!busy())say('Los! '+s.e.n+(s.e.side||/Halbzeit/.test(vt(s.e))?', erste Seite':''))}
  else{const n=s.nx;if(!n)return;const prev=S.segs[S.i-1];const newB=!prev||prev.b!==n.b;
   let t=(s.k==='prep'?'Mach dich bereit. ':'')+(newB?B[n.b].l+'. ':'')+(s.k==='rest'?'Pause. ':'')+'Als Nächstes: '+n.e.n+(vt(n.e)?', '+vt(n.e):'')+'.';
   if(n.first)t+=' '+n.e.h;say(t,true)}
@@ -473,20 +475,21 @@ function tick(){
  const s=cur(),before=Math.ceil(S.rem/1000);S.rem-=dt;const sec=Math.ceil(S.rem/1000);
  if(sec!==before){
   if(sec<=3&&sec>=1)beep(sec===1?740:520,.12);
-  if(s.k==='work'&&(s.e.side||/Halbzeit/.test(vt(s.e)))&&sec===Math.floor(s.d/2))say('Seite wechseln',true);
+  if(s.k==='work'&&sec===Math.floor(s.d/2)&&!s.e.react){if(s.e.side||/Halbzeit/.test(vt(s.e)))say('Seite wechseln',true);else if(s.d>=40)say('Halbzeit',true)}
+  if(s.k==='work'&&sec===10&&s.d>=40&&!s.e.react)say('Noch zehn Sekunden',true);
  }
  if(s.k==='work'&&s.e.react&&now>=nextCmd&&S.rem>1500){const c=CMDS[Math.floor(Math.random()*CMDS.length)];$('#cmd').textContent=c+'!';say(c,true);nextCmd=now+1300+Math.random()*1200}
  if(S.rem<=0)advance();
  renderTime();
 }
-async function start(){
+function start(){
  if(S.fin)build();
  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
  try{actx&&actx.resume()}catch(e){}
- try{if(navigator.wakeLock)wake=await navigator.wakeLock.request('screen')}catch(e){}
  S.run=true;lastT=performance.now();
- if(!S.entered){S.entered=true;track('training-start-'+DAYS[day].s+'-w'+week);enter()}
+ if(!S.entered){S.entered=true;track('training-start-'+DAYS[day].s+'-w'+week);enter()}else say('Weiter geht es.',true);
  timer=setInterval(tick,100);$('#go').textContent='Pause';
+ try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>{wake=w}).catch(()=>{})}catch(e){}
 }
 $('#go').onclick=()=>{if(S.run){stop();$('#go').textContent='Weiter';try{speechSynthesis.cancel()}catch(e){}}else start()};
 $('#skip').onclick=()=>{if(!S.fin){S.entered=true;advance();renderTime()}};
