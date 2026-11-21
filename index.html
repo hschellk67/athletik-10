@@ -97,11 +97,6 @@ h2{font-size:clamp(28px,3.4vw,36px);line-height:1.1;margin:0 0 14px}
 svg.main{width:100%;height:auto;display:block;background:var(--soft);border-radius:12px}
 svg.th{width:66px;height:46px;flex:none;background:var(--soft);border-radius:6px;align-self:center}
 svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
-svg[data-fig] .aux rect{fill:var(--line)}svg[data-fig] .aux line{stroke:var(--mute);stroke-width:3}
-svg[data-fig] polyline,svg[data-fig] .tr{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:6}
-svg[data-fig] .near polyline,svg[data-fig] .tr{stroke:var(--ink)}svg[data-fig] .hd{fill:var(--ink)}
-svg[data-fig] .far polyline{stroke:var(--clay)}
-svg.front .far polyline{stroke:var(--ink)}
 .ex{align-items:center}
 #ov{position:fixed;inset:0;z-index:50;background:var(--bg);overflow:auto;padding:16px max(5vw,16px) 40px}
 .ovc{max-width:560px;margin:0 auto;text-align:center}
@@ -311,23 +306,42 @@ function joints(P,fr){
 }
 const lerp=(A,B,t)=>A.map((v,i)=>v+((B[i]||0)-v)*t).concat(B.slice(A.length).map(v=>v*t));
 const pad=P=>{const r=P.slice();while(r.length<11)r.push(0);return r};
+const CLR={sk:'#f0c29e',skf:'#cf9b76',sh:'#d4622a',shf:'#9e4219',pa:'#1f4d38',paf:'#143628',shoe:'#2a2a2a',shoef:'#151515',hair:'#3b2a1f',mat:'#6f8fae'};
 function figSVG(name,cls){
  const D=POSE[name];if(!D)return'';
- return `<svg class="${cls}" viewBox="0 -22 ${FW} 154" data-fig="${name}" aria-hidden="true"><line class="fl" x1="0" y1="${FL}" x2="${FW}" y2="${FL}"/><g class="aux"></g><g class="far"><polyline class="l2"/><polyline class="r2"/></g><g class="near"><polyline class="l1"/><line class="tr"/><polyline class="r1"/><circle class="hd" r="8"/></g></svg>`;
+ const fr=!!D.fr,c=i=>i===1||fr?{sk:CLR.sk,sh:CLR.sh,pa:CLR.pa,shoe:CLR.shoe}:{sk:CLR.skf,sh:CLR.shf,pa:CLR.paf,shoe:CLR.shoef};
+ const ln=(k,col,w)=>`<line class="${k}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/>`;
+ const leg=i=>{const C=c(i);return ln('th'+i,C.sk,11)+ln('sn'+i,C.sk,9)+ln('ft'+i,C.shoe,8)+ln('pt'+i,C.pa,15)};
+ const arm=i=>{const C=c(i);return ln('ua'+i,C.sk,8)+ln('fa'+i,C.sk,7)+`<circle class="hn${i}" r="4.2" fill="${C.sk}"/>`+ln('sl'+i,C.sh,11)};
+ const gh=cls==='main'?`<g class="gh" opacity=".17">${['gl1','gl2','ga1','ga2'].map(k=>`<polyline class="${k}" fill="none" stroke="var(--ink)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}<line class="gtr" stroke="var(--ink)" stroke-width="16" stroke-linecap="round"/><circle class="ghd" r="9.5" fill="var(--ink)"/></g>`:'';
+ return `<svg class="${cls}" viewBox="0 -22 ${FW} 154" data-fig="${name}" aria-hidden="true"><line class="fl" x1="0" y1="${FL}" x2="${FW}" y2="${FL}"/><g class="aux"></g><ellipse class="shd" rx="30" ry="4" fill="#000" opacity=".13"/>${gh}<g>${arm(2)}${leg(2)}${ln('tr',CLR.sh,18)}${ln('nk',CLR.sk,7)}<circle class="hr" r="10.4" fill="${CLR.hair}"/><circle class="hc" r="9.5" fill="${CLR.sk}"/><circle class="ey" r="1.7" fill="#2a1d16"/><circle class="ey2" r="1.7" fill="#2a1d16"/>${leg(1)}${arm(1)}</g></svg>`;
 }
+const SL=(svg,k,a,b)=>{const e=svg.querySelector('.'+k);if(!e)return;e.setAttribute('x1',a[0].toFixed(1));e.setAttribute('y1',a[1].toFixed(1));e.setAttribute('x2',b[0].toFixed(1));e.setAttribute('y2',b[1].toFixed(1))};
+const SC=(svg,k,p)=>{const e=svg.querySelector('.'+k);if(!e)return;e.setAttribute('cx',p[0].toFixed(1));e.setAttribute('cy',p[1].toFixed(1))};
+const mix=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t];
 const pt=a=>a.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
 function drawFig(svg,t){
  const name=svg.dataset.fig,D=POSE[name];if(!D)return;
- if(svg._sx===undefined){let lo=1e9,hi=-1e9;for(const P of[D.a,D.b])for(const v of Object.values(joints(pad(P),D.fr))){lo=Math.min(lo,v[0]-8);hi=Math.max(hi,v[0]+8)}svg._sx=FW/2-(lo+hi)/2;
-  if(D.fr)svg.classList.add('front');
-  const J=joints(pad(D.a),D.fr),aux=svg.querySelector('.aux');
-  if(D.box){const x=Math.min(J.t1[0],J.a1[0])+svg._sx;aux.innerHTML=`<rect x="${x-14}" y="${FL-27}" width="30" height="27" rx="3"/>`}
-  if(D.wall){const x=J.p[0]+svg._sx-6;aux.innerHTML=`<line x1="${x}" y1="10" x2="${x}" y2="${FL}"/>`}}
+ if(svg._sx===undefined){let lo=1e9,hi=-1e9;for(const P of[D.a,D.b])for(const v of Object.values(joints(pad(P),D.fr))){lo=Math.min(lo,v[0]-9);hi=Math.max(hi,v[0]+9)}svg._sx=FW/2-(lo+hi)/2;
+  const aux=svg.querySelector('.aux'),J=joints(pad(D.a),D.fr);let h='';
+  const lying=!D.fr&&[D.a,D.b].some(P=>Math.abs(P[0]-180)>45);
+  if(lying&&!D.box)h+=`<rect x="${(lo+svg._sx-4).toFixed(1)}" y="${FL-2}" width="${(hi-lo+8).toFixed(1)}" height="6" rx="3" fill="${CLR.mat}" opacity=".45"/>`;
+  if(D.box){const x=Math.min(J.t1[0],J.a1[0])+svg._sx;h+=`<rect x="${x-16}" y="${FL-27}" width="32" height="27" rx="4" fill="var(--line)"/><rect x="${x-16}" y="${FL-27}" width="32" height="6" rx="3" fill="var(--mute)" opacity=".5"/>`}
+  if(D.wall){const x=J.p[0]+svg._sx-8;h+=`<rect x="${x-8}" y="-10" width="8" height="${FL+10}" fill="var(--line)"/>`}
+  aux.innerHTML=h;
+  if(svg.querySelector('.gh')){const G=joints(pad(D.b),D.fr),m=p=>[p[0]+svg._sx,p[1]];const q=(k,a)=>svg.querySelector('.'+k).setAttribute('points',pt(a.map(m)));
+   q('gl1',[G.p,G.k1,G.a1]);q('gl2',[G.p,G.k2,G.a2]);q('ga1',[G.n,G.e1,G.w1]);q('ga2',[G.n,G.e2,G.w2]);SL(svg,'gtr',m(G.p),m(G.n));SC(svg,'ghd',m(G.hd))}}
  const P=lerp(pad(D.a),pad(D.b),t),J=joints(P,D.fr),sx=svg._sx,m=p=>[p[0]+sx,p[1]];
- const q=(c,a)=>svg.querySelector(c).setAttribute('points',pt(a.map(m)));
- q('.l1',[J.p,J.k1,J.a1,J.t1]);q('.l2',[J.p,J.k2,J.a2,J.t2]);q('.r1',[J.n,J.e1,J.w1]);q('.r2',[J.n,J.e2,J.w2]);
- const tr=svg.querySelector('.tr'),a=m(J.p),b=m(J.n);tr.setAttribute('x1',a[0]);tr.setAttribute('y1',a[1]);tr.setAttribute('x2',b[0]);tr.setAttribute('y2',b[1]);
- const h=m(J.hd),c=svg.querySelector('.hd');c.setAttribute('cx',h[0]);c.setAttribute('cy',h[1]);
+ for(const i of[1,2]){const p=m(J.p),k=m(J['k'+i]),a=m(J['a'+i]),f=m(J['t'+i]),n=m(J.n),e=m(J['e'+i]),w=m(J['w'+i]);
+  SL(svg,'th'+i,p,k);SL(svg,'sn'+i,k,a);SL(svg,'ft'+i,a,D.fr?[a[0]+(i===1?3:-3),a[1]]:f);SL(svg,'pt'+i,p,mix(p,k,.45));
+  SL(svg,'ua'+i,n,e);SL(svg,'fa'+i,e,w);SC(svg,'hn'+i,w);SL(svg,'sl'+i,n,mix(n,e,.42))}
+ const p=m(J.p),n=m(J.n),hd=m(J.hd),T=P[0],td=dv(T),fc=dv(T-90);
+ SL(svg,'tr',mix(p,n,.04),mix(p,n,.92));SL(svg,'nk',n,mix(n,hd,.45));
+ SC(svg,'hc',hd);SC(svg,'hr',[hd[0]-fc[0]*2.6+td[0]*1.6,hd[1]-fc[1]*2.6+td[1]*1.6]);
+ if(D.fr){SC(svg,'ey',[hd[0]-3.3,hd[1]-.5]);SC(svg,'ey2',[hd[0]+3.3,hd[1]-.5])}
+ else{SC(svg,'ey',[hd[0]+fc[0]*5.6+td[0]*1.3,hd[1]+fc[1]*5.6+td[1]*1.3]);const e2=svg.querySelector('.ey2');if(e2)e2.setAttribute('r','0')}
+ const pts=['a1','a2','t1','t2','w1','w2','p','n','k1','k2','hd'].map(k=>m(J[k])).filter(q=>q[1]>FL-9);
+ const s=svg.querySelector('.shd');if(s){if(pts.length){const xs=pts.map(q=>q[0]),lo=Math.min(...xs),hi=Math.max(...xs);s.setAttribute('cx',((lo+hi)/2).toFixed(1));s.setAttribute('cy',FL+1);s.setAttribute('rx',Math.max(14,(hi-lo)/2+10).toFixed(1));s.setAttribute('opacity','.13')}else s.setAttribute('opacity','.06')}
 }
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function figLoop(now){
