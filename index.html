@@ -510,7 +510,7 @@ function start(){
  timer=setInterval(tick,100);$('#go').textContent='Pause';
  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>{wake=w}).catch(()=>{})}catch(e){}
 }
-$('#go').onclick=()=>{if(S.run){stop();$('#go').textContent='Weiter';try{speechSynthesis.cancel()}catch(e){}}else start()};
+$('#go').onclick=()=>{if(S.run){stop();$('#go').textContent='Fortsetzen';try{speechSynthesis.cancel()}catch(e){}}else start()};
 $('#skip').onclick=()=>{if(!S.fin){S.entered=true;advance();renderTime()}};
 $('#back').onclick=()=>{if(S.fin)return;let i=S.i-1;while(i>0&&S.segs[i].k!=='work')i--;S.i=Math.max(0,i);S.rem=cur().d*1000;S.entered=true;enter();renderTime()};
 $('#reset').onclick=()=>{try{speechSynthesis.cancel()}catch(e){}build()};
@@ -583,6 +583,7 @@ const today=()=>key(new Date());
 const deDate=s=>s.split('-').reverse().join('.');
 const dBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
 const fmtV=(v,T)=>v==null?'–':T.t==='r'?v+' Wdh.':T.t==='n'?String(v).replace('.',',')+' Fußl.':(Math.round(v*10)/10).toFixed(1).replace('.',',')+' s';
+const fs=(v,T)=>fmtV(v,T).replace(/\.$/,'');
 const better=(a,b,T)=>T.low?a<b:a>b;
 const bestOf=(arr,T)=>arr.reduce((m,x)=>m==null||better(x,m,T)?x:m,null);
 let ot=null;
@@ -594,7 +595,7 @@ function runTest(T,label,hist,cb){
  $('#ovk').textContent=label;$('#ovt').textContent=T.n;$('#ovf').innerHTML=figSVG(T.fig,'main');
  const vals=hist.map(x=>x.v),b=bestOf(vals,T),l=vals[vals.length-1];
  $('#ovd').textContent=T.txt;
- $('#ovm').textContent=vals.length?`Letztes Mal: ${fmtV(l,T)}. Dein Rekord: ${fmtV(b,T)}.`:'Erster Versuch: Dein Wert wird zur Messlatte.';
+ $('#ovm').textContent=vals.length?`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`:'Erster Versuch: Dein Wert wird zur Messlatte.';
  $('#ovn').textContent='';$('#ovin').innerHTML='';
  const B=$('#ovb');
  if(T.t==='n'){input(T,l??0,cb);return}
@@ -625,7 +626,7 @@ function showResult(T,v,prev,next,who){
  clearInterval(ot);const b=bestOf(prev,T),l=prev[prev.length-1],rec=prev.length&&better(v,b,T);
  $('#ovn').textContent=fmtV(v,T);$('#ovin').innerHTML='';$('#ovf').innerHTML='';$('#ovd').textContent='';
  $('#ovt').textContent=(rec?'Neuer Rekord!':T.n)+(who?' ('+who+')':'');if(who)$('#ovk').textContent=who;
- $('#ovm').textContent=!prev.length?'Erster Wert gespeichert. Ab jetzt trittst du gegen diese Zahl an.':rec?`Bisheriger Rekord: ${fmtV(b,T)}.`:`Letztes Mal: ${fmtV(l,T)}. Dein Rekord: ${fmtV(b,T)}.`;
+ $('#ovm').textContent=!prev.length?'Erster Wert gespeichert. Ab jetzt trittst du gegen diese Zahl an.':rec?`Bisheriger Rekord: ${fs(b,T)}.`:`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`;
  if(rec){say('Neuer Rekord!',true);beep(660,.2);setTimeout(()=>beep(990,.5),220)}
  $('#ovb').innerHTML=next?'<button class="btn go" id="ovnx">'+(who?'Nächstes Kind':'Weiter')+'</button>':'<button class="btn go" id="ovok">Fertig</button>';
  if(next)$('#ovnx').onclick=next;else $('#ovok').onclick=()=>ovShow(false);
