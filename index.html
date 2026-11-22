@@ -138,14 +138,15 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
 <body>
 <header class="band top"><div class="wrap">
   <h1>Athletik 10</h1>
-  <p class="sub">Athletik-Programm für Kinder und Jugendliche. 10 Minuten am Tag, ohne Geräte, im 6-Wochen-Aufbau.</p>
+  <p class="sub" data-i="sub">Athletik-Programm für Kinder und Jugendliche. 10 Minuten am Tag, ohne Geräte, im 6-Wochen-Aufbau.</p>
   <div class="ctrls">
-    <div class="grp"><label>Wer trainiert? Mehrere möglich</label><div class="chips" id="who"></div></div>
-    <div class="grp"><label>Woche</label><div class="chips" id="weeks"></div></div>
-    <div class="grp"><label>Tag</label><div class="chips" id="days"></div></div>
-    <div class="grp"><label for="lvl">Stufe</label><select id="lvl"><option value="auto">Automatisch</option><option value="0">Leicht</option><option value="1">Normal</option><option value="2">Schwer</option></select></div>
-    <div class="grp"><label>Ansage</label><button class="tog" id="voice" aria-pressed="true">Stimme an</button></div>
-    <div class="grp"><label>Challenge</label><a class="tog lk" href="#fortschritt">Mein Fortschritt</a></div>
+    <div class="grp"><label data-i="lWho">Wer trainiert? Mehrere möglich</label><div class="chips" id="who"></div></div>
+    <div class="grp"><label data-i="lWeek">Woche</label><div class="chips" id="weeks"></div></div>
+    <div class="grp"><label data-i="lDay">Tag</label><div class="chips" id="days"></div></div>
+    <div class="grp"><label for="lvl" data-i="lLvl">Stufe</label><select id="lvl"><option value="auto" data-i="oAuto">Automatisch</option><option value="0" data-i="oEasy">Leicht</option><option value="1">Normal</option><option value="2" data-i="oHard">Schwer</option></select></div>
+    <div class="grp"><label data-i="lVoice">Ansage</label><button class="tog" id="voice" aria-pressed="true">Stimme an</button></div>
+    <div class="grp"><label>Challenge</label><a class="tog lk" href="#fortschritt" data-i="lkProg">Mein Fortschritt</a></div>
+    <div class="grp"><label data-i="lLang">Sprache</label><div class="chips"><button class="chip" data-lang="de" aria-label="Deutsch">DE</button><button class="chip" data-lang="en" aria-label="English">EN</button></div></div>
   </div>
   <p class="sub2" id="whonote"></p>
 </div></header>
@@ -166,9 +167,9 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
       <div class="next" id="next"></div>
       <div class="btns">
         <button class="btn go" id="go">Start</button>
-        <button class="btn" id="back" aria-label="Zurück">Zurück</button>
-        <button class="btn" id="skip" aria-label="Weiter">Weiter</button>
-        <button class="btn" id="reset">Neu</button>
+        <button class="btn" id="back" data-i="bBack">Zurück</button>
+        <button class="btn" id="skip" data-i="bSkip">Weiter</button>
+        <button class="btn" id="reset" data-i="bReset">Neu</button>
         <button class="btn ch" id="chal">Challenge</button>
       </div>
     </div>
@@ -184,28 +185,28 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
 </div></section>
 
 <section class="band" id="fortschritt" style="padding-top:0"><div class="wrap">
-  <h2>Mein Fortschritt: <span id="pname"></span></h2>
-  <p class="lead">Hier trittst du nur gegen dich selbst an. Jeder Wert wird mit deinen eigenen früheren Werten verglichen, nie mit anderen.</p>
-  <div class="srow"><div class="stk"><span class="sn" id="streak">0</span><span>Trainingstage in Serie</span></div><button class="btn" id="pause">Heute Pause</button><button class="btn go" id="chal2">Challenge</button></div>
-  <h3 class="h3">Challenges der Woche</h3>
-  <p class="next">Nach dem Training eine kurze Messrunde mit festem Zeitfenster, damit die Werte über alle Wochen vergleichbar bleiben.</p>
+  <h2><span data-i="progTitle">Mein Fortschritt: </span><span id="pname"></span></h2>
+  <p class="lead" data-i="lead">Hier trittst du nur gegen dich selbst an. Jeder Wert wird mit deinen eigenen früheren Werten verglichen, nie mit anderen.</p>
+  <div class="srow"><div class="stk"><span class="sn" id="streak">0</span><span data-i="streakL">Trainingstage in Serie</span></div><button class="btn" id="pause">Heute Pause</button><button class="btn go" id="chal2">Challenge</button></div>
+  <h3 class="h3" data-i="h3ch">Challenges der Woche</h3>
+  <p class="next" data-i="chIntro">Nach dem Training eine kurze Messrunde mit festem Zeitfenster, damit die Werte über alle Wochen vergleichbar bleiben.</p>
   <div class="plan pg" id="dch"></div>
-  <h3 class="h3">Athletik-Check</h3>
-  <p class="next">Fünf Tests für Kraft, Rumpf, Balance, Sprungkraft und Schnelligkeit, etwa 6 Minuten. Empfohlen in Woche 1, 3 und 5 und nach Woche 6, am besten ausgeruht statt nach dem Training.</p>
+  <h3 class="h3" data-i="h3chk">Athletik-Check</h3>
+  <p class="next" data-i="chkIntro">Fünf Tests für Kraft, Rumpf, Balance, Sprungkraft und Schnelligkeit, etwa 6 Minuten. Empfohlen in Woche 1, 3 und 5 und nach Woche 6, am besten ausgeruht statt nach dem Training.</p>
   <div id="chk"></div>
-  <div class="prow" id="profil"><label for="prof"><b>Profil</b></label><select id="prof"></select><input id="pnew" placeholder="Name" maxlength="20" aria-label="Name"><input id="page" type="number" inputmode="numeric" min="5" max="19" placeholder="Alter" aria-label="Alter in Jahren"><button class="btn" id="padd">Neues Profil</button><button class="btn" id="pren">Ändern</button><button class="btn" id="pdel">Profil löschen</button></div>
-  <p class="next">Mehrere Kinder an einem Gerät? Jedes bekommt ein eigenes Profil mit Namen und Alter und sieht nur seine eigenen Werte. Das Alter legt die automatische Stufe fest: unter 10 Jahren leichter, ab 13 früher schwer.</p>
-  <details class="bk"><summary>Sicherung und Gerätewechsel</summary>
-    <p class="next">Alle Werte bleiben nur auf diesem Gerät. Mit dem Sicherungscode nimmst du das aktuelle Profil auf ein anderes Gerät mit.</p>
-    <button class="btn" id="bkcp">Sicherungscode kopieren</button>
-    <textarea id="bktx" rows="3" placeholder="Sicherungscode hier einfügen" aria-label="Sicherungscode"></textarea>
-    <button class="btn" id="bkld">Code laden</button>
+  <div class="prow" id="profil"><label for="prof" data-i="lProf"><b>Profil</b></label><select id="prof"></select><input id="pnew" placeholder="Name" maxlength="20" aria-label="Name"><input id="page" type="number" inputmode="numeric" min="5" max="19" placeholder="Alter" aria-label="Alter in Jahren" data-ia="aAge"><button class="btn" id="padd" data-i="bAdd">Neues Profil</button><button class="btn" id="pren" data-i="bRen">Ändern</button><button class="btn" id="pdel">Profil löschen</button></div>
+  <p class="next" data-i="profNote">Mehrere Kinder an einem Gerät? Jedes bekommt ein eigenes Profil mit Namen und Alter und sieht nur seine eigenen Werte. Das Alter legt die automatische Stufe fest: unter 10 Jahren leichter, ab 13 früher schwer.</p>
+  <details class="bk"><summary data-i="bkSum">Sicherung und Gerätewechsel</summary>
+    <p class="next" data-i="bkNote">Alle Werte bleiben nur auf diesem Gerät. Mit dem Sicherungscode nimmst du das aktuelle Profil auf ein anderes Gerät mit.</p>
+    <button class="btn" id="bkcp" data-i="bkcp">Sicherungscode kopieren</button>
+    <textarea id="bktx" rows="3" placeholder="Sicherungscode hier einfügen" aria-label="Sicherungscode" data-ip="pBk"></textarea>
+    <button class="btn" id="bkld" data-i="bkld">Code laden</button>
     <p class="next" id="bkmsg"></p>
   </details>
 </div></section>
 
 <div id="ov" hidden><div class="ovc">
-  <div class="ovh"><span id="ovk"></span><button class="btn" id="ovx">Schließen</button></div>
+  <div class="ovh"><span id="ovk"></span><button class="btn" id="ovx" data-i="ovx">Schließen</button></div>
   <h2 id="ovt"></h2>
   <div class="figbox" id="ovf"></div>
   <p class="hint" id="ovd"></p>
@@ -216,8 +217,8 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
 </div></div>
 
 <section class="band" style="padding-top:0"><div class="wrap">
-  <h2>Regeln vom Trainer</h2>
-  <ul class="notes">
+  <h2 data-i="rulesH">Regeln vom Trainer</h2>
+  <ul class="notes" data-i="rules">
     <li><b>Technik vor Tempo.</b> Wird die Ausführung unsauber, die Übung ruhig beenden. Lieber weniger, dafür sauber.</li>
     <li><b>Leise landen.</b> Knie zeigen über die Füße und knicken nie nach innen. Sprungtage sind Mo, Mi und Fr. Di, Do und Sa bleiben sprungarm, So ganz ohne Sprünge.</li>
     <li><b>Vereinstraining oder Spiel am selben Tag:</b> nur Aktivierung und Schnelligkeit, Finisher weglassen. Am Tag nach einem Pitching-Einsatz keine Push-ups, Y-T-W nur locker.</li>
@@ -228,13 +229,26 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
     <li><b>Challenge:</b> Nur saubere Wiederholungen zählen. Ein schlechterer Wert ist normal, etwa nach einem langen Tag. Entscheidend ist die Kurve über Wochen.</li>
     <li><b>Schmerzen</b> an Knie, Ferse, Schulter oder Ellbogen: Training pausieren und ärztlich abklären lassen.</li>
   </ul>
-  <p class="foot">Datenschutz: Die Seite zählt Aufrufe anonym mit GoatCounter, ohne Cookies und ohne personenbezogene Daten. Der Trainingsfortschritt bleibt nur in diesem Browser gespeichert.</p>
-  <p class="foot">Die Ansage nutzt die deutsche Stimme des Geräts. Am Handy den Lautlos-Schalter aus- und die Lautstärke hochstellen.</p>
+  <p class="foot" data-i="foot1">Datenschutz: Die Seite zählt Aufrufe anonym mit GoatCounter, ohne Cookies und ohne personenbezogene Daten. Der Trainingsfortschritt bleibt nur in diesem Browser gespeichert.</p>
+  <p class="foot" data-i="foot2">Die Ansage nutzt die deutsche Stimme des Geräts. Am Handy den Lautlos-Schalter aus- und die Lautstärke hochstellen.</p>
 </div></section>
 
 <script>
 {
 const $=s=>document.querySelector(s);
+let lang=(()=>{let v=null;try{v=localStorage.getItem('ath10lang')}catch(e){}if(v==='de'||v==='en')return v;const L=(navigator.languages&&navigator.languages.length?navigator.languages:[navigator.language||'']).map(x=>String(x||'').toLowerCase()).filter(Boolean);if(!L.length||L[0].startsWith('de'))return 'de';return 'en'})();
+const EN={"Montag": "Monday", "Dienstag": "Tuesday", "Mittwoch": "Wednesday", "Donnerstag": "Thursday", "Freitag": "Friday", "Samstag": "Saturday", "Sonntag": "Sunday", "Mo": "Mon", "Di": "Tue", "Mi": "Wed", "Do": "Thu", "Fr": "Fri", "Sa": "Sat", "So": "Sun", "Antritt & Druck": "First Step & Push", "Rumpf & Schulter": "Core & Shoulders", "Sprungkraft": "Jumping Power", "Hüfte & Kontrolle": "Hips & Control", "Power & Reaktion": "Power & Reaction", "Spiel & Koordination": "Play & Coordination", "Mobilität & Regeneration": "Mobility & Recovery", "Aktivierung": "Activation", "Schnelligkeit": "Speed", "Kraft": "Strength", "Finisher": "Finisher", "Mobilität": "Mobility", "Balance": "Balance", "Beweglichkeit": "Flexibility", "Ausklang": "Cool-down", "Technik": "Technique", "Tempo": "Tempo", "Power": "Power", "Links": "Left", "Rechts": "Right", "Vor": "Forward", "Zurück": "Back", "Inchworm": "Inchworm", "Einbeinstand": "Single-Leg Stand", "High-Knees-Sprint": "High-Knees Sprint", "Lateral Shuffle": "Lateral Shuffle", "Push-ups": "Push-ups", "Split Squat": "Split Squat", "Glute Bridge": "Glute Bridge", "Burpees": "Burpees", "High Knees": "High Knees", "Slow-Motion-Squats": "Slow-Motion Squats", "Seiltänzer-Gang": "Tightrope Walk", "Quick Feet": "Quick Feet", "Dot Drill": "Dot Drill", "Plank Shoulder Taps": "Plank Shoulder Taps", "Lateral Lunges": "Lateral Lunges", "Y-T-W liegend": "Y-T-W (lying)", "Mountain Climbers": "Mountain Climbers", "Bear Crawl": "Bear Crawl", "Hollow Body Hold": "Hollow Body Hold", "Bird Dog": "Bird Dog", "Shuttle Run": "Shuttle Run", "Box Step": "Box Step", "Wall Sit": "Wall Sit", "Reverse Lunge mit Rotation": "Reverse Lunge with Rotation", "Seitstütz": "Side Plank", "Squat Jumps": "Squat Jumps", "Broad Jumps": "Broad Jumps", "Dead Bug": "Dead Bug", "Standwaage": "T-Balance", "Zick-Zack-Sprint": "Zig-Zag Sprint", "Linien-Hops": "Line Hops", "Enge Push-ups": "Close-Grip Push-ups", "Einbeiniges Kreuzheben": "Single-Leg Deadlift", "Superman-Hold": "Superman Hold", "Plank Jacks": "Plank Jacks", "Flutter Kicks": "Flutter Kicks", "Plank March": "Plank March", "Einbeinstand mit Rotation": "Single-Leg Stand with Rotation", "Reaktions-Drill": "Reaction Drill", "Lateral Bounds": "Lateral Bounds", "Decline Push-ups": "Decline Push-ups", "Wadenheben": "Calf Raises", "Holzhacker": "Wood Chop", "Jump Lunges": "Jump Lunges", "Jumping Jacks": "Jumping Jacks", "Armkreisen": "Arm Circles", "Beinpendel": "Leg Swings", "Weltbeste Dehnung": "World's Greatest Stretch", "Katze-Kuh": "Cat-Cow", "Tiefe Hocke": "Deep Squat", "Mit den Händen nach vorn laufen, im Brett kurz halten, zurücklaufen. Knie möglichst gestreckt.": "Walk your hands forward, hold the plank briefly, walk back. Keep your knees as straight as you can.", "Standbein leicht gebeugt, Oberkörper ruhig.": "Standing knee slightly bent, upper body still.", "Auf der Stelle, Knie bis Hüfthöhe, Arme arbeiten wie beim Sprint.": "On the spot, knees up to hip height, arms pump like in a sprint.", "Fielder-Stellung: tief und breit, die Füße kreuzen nie. Drei Schritte links, drei rechts.": "Fielder stance: low and wide, feet never cross. Three steps left, three right.", "Körper wie ein Brett, Brust bis eine Faust über den Boden.": "Body straight as a board, chest down to one fist above the floor.", "Hinteres Knie Richtung Boden, vorderes Knie über dem Fuß.": "Back knee towards the floor, front knee over the foot.", "Hüfte hoch, Po fest anspannen, oben kurz halten.": "Hips up, squeeze your glutes, hold briefly at the top.", "Ruhig und sauber, leise landen.": "Calm and clean, land softly.", "Schnell und locker auf den Fußballen.": "Quick and light on the balls of your feet.", "Vier Sekunden runter, vier Sekunden hoch. Fersen bleiben am Boden.": "Four seconds down, four seconds up. Heels stay on the floor.", "Ferse vor Zehen auf einer Linie, vor und zurück.": "Heel to toe along a line, forwards and back.", "Mini-Schritte auf der Stelle, so schnell wie möglich, Oberkörper ruhig.": "Tiny steps on the spot, as fast as you can, upper body still.", "Fünf gedachte Punkte wie auf einem Würfel. Zwischen den Punkten hin und her springen.": "Five imaginary dots like on a dice. Jump back and forth between the dots.", "Im Stütz abwechselnd die Schulter antippen. Die Hüfte bleibt ruhig.": "In a high plank, tap the opposite shoulder, alternating. Hips stay still.", "Seitwärts ausfallen, Po nach hinten, das andere Bein bleibt gestreckt.": "Lunge sideways, hips back, the other leg stays straight.", "Bauchlage, Daumen zeigen nach oben, Schulterblätter zusammen. Langsam. Das schützt den Wurfarm.": "Lying on your stomach, thumbs up, shoulder blades together. Slowly. This protects the throwing arm.", "Hüfte unten, Knie zügig zur Brust.": "Hips down, drive your knees to your chest.", "Knie knapp über dem Boden, vor und zurück krabbeln.": "Knees just above the floor, crawl forwards and back.", "Unterer Rücken am Boden, Arme und Beine lang.": "Lower back on the floor, arms and legs long.", "Im Vierfüßler Arm und Gegenbein strecken, zwei Sekunden halten, wechseln.": "On all fours, reach out one arm and the opposite leg, hold two seconds, switch.", "Zwei Linien, 4 bis 5 Meter auseinander. Tief abbremsen, die Linie mit der Hand berühren.": "Two lines 4 to 5 metres apart. Brake low and touch the line with your hand.", "Schnelles Quadrat am Boden: vor, seit, zurück, seit. Jede Runde die Richtung wechseln.": "Quick square on the floor: forward, side, back, side. Change direction every round.", "Rücken an der Wand, Oberschenkel waagrecht.": "Back against the wall, thighs parallel to the floor.", "Schritt zurück, Oberkörper über das vordere Bein drehen. Das ist die Rumpfdrehung beim Schwung.": "Step back and rotate your upper body over the front leg. That is the core rotation of the swing.", "Körper gerade, Hüfte oben.": "Body straight, hips up.", "Tief rein, explosiv hoch, leise landen.": "Sink low, explode up, land softly.", "Weit nach vorn springen, Landung zwei Sekunden einfrieren, zurückgehen.": "Jump far forward, freeze the landing for two seconds, walk back.", "Rücken flach am Boden, Arm und Gegenbein langsam strecken.": "Back flat on the floor, slowly extend one arm and the opposite leg.", "Oberkörper und freies Bein bilden eine Linie.": "Upper body and free leg form one line.", "Drei Schritte diagonal, abstoppen, Richtung wechseln. Bei wenig Platz auf der Stelle mit Richtungswechsel.": "Three steps diagonally, stop, change direction. Short on space? Do it on the spot with direction changes.", "Statt Leiter: schnell über eine Linie hüpfen, seitlich und vor-zurück.": "Instead of a ladder: hop quickly over a line, sideways and forward-back.", "Hände unter der Brust, Ellbogen nah am Körper.": "Hands under your chest, elbows close to your body.", "Hüfte nach hinten schieben, Rücken lang, Becken bleibt gerade. Basis für Pitching und Schlag.": "Push your hips back, long back, pelvis stays level. A base for pitching and hitting.", "Bauchlage, Arme und Beine leicht abheben, Blick zum Boden.": "Lying on your stomach, lift arms and legs slightly, eyes on the floor.", "Im Stütz die Füße auf und zu, die Hüfte bleibt ruhig.": "In a plank, jump your feet apart and together, hips stay still.", "Rücken am Boden, Beine flach und schnell kreuzen.": "Back on the floor, legs low, cross them quickly.", "Vom Unterarm- in den Handstütz und zurück. Hüfte ruhig.": "From forearm plank to high plank and back. Hips still.", "Auf einem Bein stehen, Oberkörper langsam nach links und rechts drehen.": "Stand on one leg, slowly rotate your upper body left and right.", "Ready Position wie im Infield. Auf Ansage sofort zwei schnelle Schritte in die Richtung, dann zurück.": "Ready position like in the infield. On the call, two quick steps in that direction, then back.", "Seitlich abspringen, auf einem Bein landen, eine Sekunde halten. Wie der Push-off beim Pitchen.": "Push off sideways, land on one leg, hold one second. Like a pitcher's push-off.", "Füße erhöht auf Sofa oder Stufe.": "Feet raised on a sofa or step.", "Langsam hoch und runter, mit einer Hand an der Wand.": "Slowly up and down, one hand on the wall.", "Hände gefaltet, diagonal von oben nach unten ziehen, die Hüfte dreht mit.": "Hands clasped, pull diagonally from high to low, hips rotate with it.", "Wechselsprung im Ausfallschritt, kontrolliert landen.": "Switch legs in a jumping lunge, land under control.", "Locker und rhythmisch.": "Easy and rhythmic.", "Arme groß und locker kreisen, erst vorwärts, dann rückwärts. Schultern bleiben unten.": "Big, loose arm circles, first forwards, then backwards. Shoulders stay down.", "Ready Position. Auf Ansage sofort zwei schnelle Schritte in die Richtung, dann zurück.": "Ready position. On the call, two quick steps in that direction, then back.", "Knie knapp über dem Boden, vor und zurück krabbeln. Rücken flach wie ein Tisch.": "Knees just above the floor, crawl forwards and back. Back flat like a table.", "Arme groß und locker kreisen, erst vorwärts, dann rückwärts.": "Big, loose arm circles, first forwards, then backwards.", "Mit einer Hand an der Wand. Bein locker vor und zurück schwingen, Oberkörper bleibt ruhig.": "One hand on the wall. Swing your leg loosely forwards and back, upper body stays still.", "Oberkörper und freies Bein bilden eine Linie. Ruhig atmen.": "Upper body and free leg form one line. Breathe calmly.", "Großer Ausfallschritt, beide Hände innen am Boden. Dann den vorderen Arm zur Decke drehen und nachschauen.": "Big lunge, both hands on the floor inside the front foot. Then rotate the front arm to the ceiling and follow it with your eyes.", "Hüfte langsam hoch, oben zwei Sekunden halten, langsam ablegen.": "Raise your hips slowly, hold two seconds at the top, lower slowly.", "Im Vierfüßler Arm und Gegenbein strecken, drei Sekunden halten, wechseln.": "On all fours, reach out one arm and the opposite leg, hold three seconds, switch.", "Im Vierfüßler einatmen und den Rücken durchhängen lassen, ausatmen und rund machen. Langsam.": "On all fours, breathe in and let your back sag, breathe out and round it. Slowly.", "Füße hüftbreit, Fersen bleiben am Boden, Ellbogen schieben die Knie sanft nach außen. Ruhig atmen.": "Feet hip-width, heels stay down, elbows gently push the knees out. Breathe calmly.", "Augen offen": "eyes open", "Arme verschränkt": "arms crossed", "Augen zu": "eyes closed", "Hände erhöht": "hands raised", "vom Boden": "from the floor", "2 s runter, explosiv hoch": "2 s down, explode up", "halbe Tiefe": "half depth", "volle Tiefe": "full depth", "3 s runter": "3 s down", "beidbeinig": "both legs", "beidbeinig, oben 2 s": "both legs, 2 s at the top", "einbeinig, Wechsel zur Halbzeit": "single leg, switch at halfway", "ohne Sprung": "no jump", "mit Sprung": "with jump", "mit Push-up und Sprung": "with push-up and jump", "Hände an der Hüfte": "hands on hips", "rückwärts, Augen zu": "backwards, eyes closed", "beidbeinig schnell": "both legs, fast", "einbeinig": "single leg", "Füße breit": "feet wide", "Füße schulterbreit": "feet shoulder-width", "Füße zusammen": "feet together", "Knie gebeugt": "knees bent", "Beine gestreckt": "legs straight", "Arme über dem Kopf": "arms overhead", "etwas höher": "a bit higher", "waagrecht": "thighs parallel", "einbeinig im Wechsel": "single leg, alternating", "Knie am Boden": "knee on the floor", "Füße gestapelt": "feet stacked", "oberes Bein angehoben": "top leg raised", "auf den Knien": "on your knees", "Diamond": "diamond", "normale Push-ups": "regular push-ups", "Füße auf dem Sofa": "feet on the sofa", "Füße erhöht, 3 s runter": "feet raised, 3 s down", "einbeinig, oben 2 s": "single leg, 2 s at the top", "Ausfallschritte ohne Sprung": "lunges without jump", "Wechselsprung": "jump switch", "Wechselsprung, unten kurz halten": "jump switch, pause at the bottom", "ohne Sprung, seitlich tippen": "no jump, step to the side", "locker springen": "easy jumps", "schnell springen": "fast jumps", "Unterarmstütz halten": "Forearm Plank Hold", "Einbeinstand, Augen zu": "Single-Leg Stand, Eyes Closed", "Wall Sit halten": "Wall Sit Hold", "Tiefe Hocke halten": "Deep Squat Hold", "30 Sekunden: so viele saubere Push-ups wie möglich. Brust bis eine Faust über den Boden.": "30 seconds: as many clean push-ups as you can. Chest down to one fist above the floor.", "So lange halten, bis die Hüfte durchhängt oder hochgeht. Dann sofort Stopp tippen.": "Hold until your hips sag or rise. Then tap Stop right away.", "30 Sekunden: tief rein, explosiv hoch, leise landen. Nur saubere Sprünge zählen.": "30 seconds: sink low, explode up, land softly. Only clean jumps count.", "Immer dasselbe Standbein. Stopp tippen, sobald die Augen aufgehen oder der zweite Fuß den Boden berührt.": "Always the same standing leg. Tap Stop as soon as your eyes open or the other foot touches the floor.", "30 Sekunden: so viele saubere Burpees wie möglich, mit Sprung.": "30 seconds: as many clean burpees as you can, with a jump.", "Rücken an der Wand, Oberschenkel waagrecht. Stopp tippen, sobald du hochkommst oder die Position nicht mehr hältst.": "Back against the wall, thighs parallel. Tap Stop as soon as you come up or can't hold the position.", "Füße hüftbreit, Fersen am Boden, Brust aufrecht. Stopp tippen, sobald die Fersen abheben. Höchstens zwei Minuten.": "Feet hip-width, heels down, chest up. Tap Stop as soon as your heels lift. Two minutes at most.", "Rumpf": "Core", "Push-ups in 60 s": "Push-ups in 60 s", "Standweitsprung": "Standing Broad Jump", "Shuttle Run 5 × 5 m": "Shuttle Run 5 × 5 m", "60 Sekunden: so viele saubere Push-ups wie möglich. Pausen sind erlaubt, die Zeit läuft weiter.": "60 seconds: as many clean push-ups as you can. Breaks are allowed, the clock keeps running.", "So lange halten, bis die Hüfte durchhängt oder hochgeht. Dann Stopp tippen.": "Hold until your hips sag or rise. Then tap Stop.", "3 Versuche aus dem Stand. Von der Absprunglinie bis zur hinteren Ferse in Fußlängen messen (Ferse an Zehenspitze). Den besten Versuch eintragen.": "3 attempts from standing. Measure from the take-off line to the back heel in foot lengths (heel to toe). Enter your best attempt.", "Zwei Linien 5 m auseinander. Fünf Strecken, jede Linie mit der Hand berühren. Start tippen, laufen, Stopp tippen. Am besten stoppt jemand anderes.": "Two lines 5 m apart. Five lengths, touch each line with your hand. Tap Start, run, tap Stop. Ideally someone else times you."};
+const UI={"sub": "Athletics program for kids and teens. 10 minutes a day, no equipment, built up over 6 weeks.", "lWho": "Who's training? Pick one or more", "lWeek": "Week", "lDay": "Day", "lLvl": "Level", "oAuto": "Automatic", "oEasy": "Easy", "oHard": "Hard", "lVoice": "Voice", "lkProg": "My progress", "lLang": "Language", "bBack": "Back", "bSkip": "Skip", "bReset": "Reset", "progTitle": "My progress: ", "lead": "Here you only compete against yourself. Every value is compared with your own earlier values, never with anyone else's.", "streakL": "training days in a row", "h3ch": "Challenges of the week", "chIntro": "A short measuring round after training with a fixed time window, so your values stay comparable across all weeks.", "h3chk": "Athletics Check", "chkIntro": "Five tests for strength, core, balance, jumping power and speed, about 6 minutes. Recommended in weeks 1, 3 and 5 and after week 6, ideally rested rather than after training.", "lProf": "<b>Profile</b>", "bAdd": "New profile", "bRen": "Change", "profNote": "Several kids on one device? Each gets their own profile with name and age and only sees their own values. The age sets the automatic level: easier under 10, harder sooner from 13.", "bkSum": "Backup and switching devices", "bkNote": "All values stay on this device only. The backup code lets you take the current profile to another device.", "bkcp": "Copy backup code", "bkld": "Load code", "ovx": "Close", "rulesH": "Coach's rules", "rules": "<li><b>Technique before tempo.</b> If your form gets sloppy, finish the exercise calmly. Fewer reps, but clean ones.</li>\n    <li><b>Land softly.</b> Knees point over the toes and never cave in. Jump days are Mon, Wed and Fri. Tue, Thu and Sat stay low on jumps, Sun has none at all.</li>\n    <li><b>Club practice or a game on the same day:</b> only activation and speed, skip the finisher. The day after a pitching outing no push-ups, Y-T-W only light.</li>\n    <li><b>In the evening</b> leave at least an hour before bedtime. <b>In the morning</b> take the activation calmly.</li>\n    <li><b>Weekend:</b> Saturday play and coordination, Sunday mobility and recovery, both deliberately easy. With a game or tournament on the weekend, use the rest-day button or do only the Sunday session.</li>\n    <li><b>Playing outside, throwing, running</b> counts more than any exercise. The 10 minutes add to that, they don't replace it.</li>\n    <li><b>Levels:</b> weeks 1–2 technique with longer rests, weeks 3–4 more tempo, weeks 5–6 harder variants. After that, start again from week 3.</li>\n    <li><b>Challenge:</b> only clean reps count. A worse value is normal, for example after a long day. What matters is the curve over the weeks.</li>\n    <li><b>Pain</b> in a knee, heel, shoulder or elbow: pause training and have it checked by a doctor.</li>", "foot1": "Privacy: the site counts visits anonymously with GoatCounter, without cookies or personal data. Training progress is stored only in this browser.", "foot2": "The voice uses your device's built-in English voice. On a phone, turn off silent mode and turn the volume up.", "aAge": "Age in years", "pBk": "Paste backup code here"};
+const tx=x=>lang==='en'&&x!=null&&EN[x]!=null?EN[x]:x;
+const tr=(d,e)=>lang==='en'?e:d;
+const dec=v=>lang==='en'?String(v):String(v).replace('.',',');
+const exN=e=>tx(e.n),exH=e=>tx(e.h);
+function applyStatic(){document.documentElement.lang=lang;
+ document.querySelectorAll('[data-i]').forEach(el=>{if(el.dataset.de==null)el.dataset.de=el.innerHTML;el.innerHTML=lang==='en'&&UI[el.dataset.i]!=null?UI[el.dataset.i]:el.dataset.de});
+ document.querySelectorAll('[data-ia]').forEach(el=>{if(el.dataset.dea==null)el.dataset.dea=el.getAttribute('aria-label');el.setAttribute('aria-label',lang==='en'?UI[el.dataset.ia]:el.dataset.dea)});
+ document.querySelectorAll('[data-ip]').forEach(el=>{if(el.dataset.dep==null)el.dataset.dep=el.getAttribute('placeholder');el.setAttribute('placeholder',lang==='en'?UI[el.dataset.ip]:el.dataset.dep)});
+ document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang))}
+applyStatic();
 const FL=122,FW=220;
 const SPR_A=[165,90,0,-20,-40,-40,-10,40,120,3],SPR_B=[165,-20,-40,90,0,40,120,-40,-10,3];
 const HP=[115,-65,-65,-65,-65,0,0,0,0],PD=[102,-78,-78,-78,-78,-60,60,-60,60],FP=[102,-78,-78,-78,-78,0,90,0,90];
@@ -435,6 +449,7 @@ if(!st.profiles[st.cur])st.cur=Object.keys(st.profiles)[0];
 const me=()=>st.profiles[st.cur];
 st.sel=(st.sel||[st.cur]).filter(id=>st.profiles[id]);if(!st.sel.length)st.sel=[st.cur];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pn=p=>p&&p.name==='Ich'?tr('Ich','Me'):(p?p.name:'');
 const parts=()=>st.sel.map(id=>st.profiles[id]).filter(Boolean);
 const ageOf=p=>p&&p.age?p.age+Math.floor((Date.now()-(p.ageSet||Date.now()))/31557600000):null;
 const track=n=>{try{window.goatcounter&&window.goatcounter.count&&window.goatcounter.count({path:n,title:n,event:true})}catch(e){}};
@@ -445,13 +460,14 @@ const phase=()=>PH[week<=2?0:week<=4?1:2];
 const phIdx=()=>week<=2?0:week<=4?1:2;
 const autoLvl=()=>{const a=ageOf(me());return(a==null?[1,1,2]:a<=9?[0,0,1]:a<=12?[1,1,2]:[1,2,2])[phIdx()]};
 const lvl=()=>lvlSel==='auto'?autoLvl():+lvlSel;
-const vt=e=>e&&e.v?e.v[lvl()]:'';
+const vraw=e=>e&&e.v?e.v[lvl()]:'';
+const vt=e=>tx(vraw(e));
 const fmt=s=>Math.floor(s/60)+':'+String(Math.round(s%60)).padStart(2,'0');
-let S,B,timer=null,actx=null,wake=null,lastT=0,nextCmd=0,deVoice=null;
+let S,B,timer=null,actx=null,wake=null,lastT=0,nextCmd=0,deVoice=null,enVoice=null;
 
-function pickVoice(){const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de/i.test(x.lang))||null}
+function pickVoice(){const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de/i.test(x.lang))||null;enVoice=v.find(x=>/^en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis,u=new SpeechSynthesisUtterance(t);u.lang='de-DE';if(deVoice)u.voice=deVoice;u.rate=1.02;
+function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis,u=new SpeechSynthesisUtterance(t);u.lang=lang==='en'?'en-GB':'de-DE';const vv=lang==='en'?enVoice:deVoice;if(vv)u.voice=vv;u.rate=1.02;
  if(cut&&(ss.speaking||ss.pending)){ss.cancel();setTimeout(()=>{try{ss.speak(u)}catch(e){}},90)}else{if(ss.paused)ss.resume();ss.speak(u)}}catch(e){}}
 const busy=()=>{try{return speechSynthesis.speaking||speechSynthesis.pending}catch(e){return false}};
 function beep(f,d){if(!actx)return;try{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.connect(g);g.connect(actx.destination);const n=actx.currentTime;g.gain.setValueAtTime(.25,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.start(n);o.stop(n+d)}catch(e){}}
@@ -459,7 +475,7 @@ function beep(f,d){if(!actx)return;try{const o=actx.createOscillator(),g=actx.cr
 function build(){
  const D=DAYS[day],P=phase();
  const BL=D.bl||['Aktivierung','Schnelligkeit','Kraft','Finisher'];
- B=[{l:BL[0],ex:D.akt,m:'seq',t:[50,10]},{l:BL[1],ex:D.spd,m:'alt',r:4,t:P.spd},{l:BL[2],ex:D.kraft,m:'seq',t:P.kr},{l:BL[3],ex:D.fin,m:'alt',r:6,t:P.fin}];
+ B=[{l:tx(BL[0]),ex:D.akt,m:'seq',t:[50,10]},{l:tx(BL[1]),ex:D.spd,m:'alt',r:4,t:P.spd},{l:tx(BL[2]),ex:D.kraft,m:'seq',t:P.kr},{l:tx(BL[3]),ex:D.fin,m:'alt',r:6,t:P.fin}];
  const segs=[{k:'prep',d:10,b:-1}];
  B.forEach((b,bi)=>{const list=b.m==='seq'?b.ex:Array.from({length:b.r},(_,i)=>b.ex[i%2]);
   list.forEach((e,i)=>{segs.push({k:'work',d:b.t[0],e,b:bi,first:b.m==='seq'||i<2});segs.push({k:'rest',d:b.t[1],b:bi})})});
@@ -473,10 +489,10 @@ function stop(){clearInterval(timer);timer=null;if(S)S.run=false;if(wake){try{wa
 const cur=()=>S.segs[S.i];
 function enter(){
  const s=cur();$('#cmd').textContent='';
- if(s.k==='work'){beep(880,.45);if(s.e.react)nextCmd=performance.now()+2500;if(!busy())say('Los! '+s.e.n+(s.e.side||/Halbzeit/.test(vt(s.e))?', erste Seite':''))}
+ if(s.k==='work'){beep(880,.45);if(s.e.react)nextCmd=performance.now()+2500;if(!busy())say(tr('Los! ','Go! ')+exN(s.e)+(s.e.side||/Halbzeit/.test(vraw(s.e))?tr(', erste Seite',', first side'):''))}
  else{const n=s.nx;if(!n)return;const prev=S.segs[S.i-1];const newB=!prev||prev.b!==n.b;
-  let t=(s.k==='prep'?'Mach dich bereit. ':'')+(newB?B[n.b].l+'. ':'')+(s.k==='rest'?'Pause. ':'')+'Als Nächstes: '+n.e.n+(vt(n.e)?', '+vt(n.e):'')+'.';
-  if(n.first)t+=' '+n.e.h;say(t,true)}
+  let t=(s.k==='prep'?tr('Mach dich bereit. ','Get ready. '):'')+(newB?B[n.b].l+'. ':'')+(s.k==='rest'?tr('Pause. ','Rest. '):'')+tr('Als Nächstes: ','Next up: ')+exN(n.e)+(vt(n.e)?', '+vt(n.e):'')+'.';
+  if(n.first)t+=' '+exH(n.e);say(t,true)}
  renderNow();
 }
 function advance(){
@@ -485,19 +501,19 @@ function advance(){
 }
 function finish(){
  stop();S.fin=true;S.rem=0;beep(660,.25);setTimeout(()=>beep(990,.6),250);
- say('Geschafft! Zehn Minuten stark trainiert.',true);
+ say(tr('Geschafft! Zehn Minuten stark trainiert.','Done! Ten strong minutes.'),true);
  parts().forEach(p=>{p.done[(p===me()?week:(p.week||1))+'-'+day]=1;p.days[today()]='t'});save();renderProg();track('training-fertig-'+DAYS[day].s+'-w'+week);renderAll();
- $('#name').textContent='Geschafft!';$('#blk').textContent=DAYS[day].n+' erledigt';$('#hint').textContent='Gut gemacht. Jetzt noch die Challenge des Tages? Dauert nur eine Minute.';$('#var').hidden=true;$('#next').textContent='';$('#go').textContent='Nochmal';
+ $('#name').textContent=tr('Geschafft!','Done!');$('#blk').textContent=tx(DAYS[day].n)+tr(' erledigt',' done');$('#hint').textContent=tr('Gut gemacht. Jetzt noch die Challenge des Tages? Dauert nur eine Minute.','Well done. Up for the challenge of the day? It only takes a minute.');$('#var').hidden=true;$('#next').textContent='';$('#go').textContent=tr('Nochmal','Again');
 }
 function tick(){
  const now=performance.now(),dt=now-lastT;lastT=now;
  const s=cur(),before=Math.ceil(S.rem/1000);S.rem-=dt;const sec=Math.ceil(S.rem/1000);
  if(sec!==before){
   if(sec<=3&&sec>=1)beep(sec===1?740:520,.12);
-  if(s.k==='work'&&sec===Math.floor(s.d/2)&&!s.e.react){if(s.e.side||/Halbzeit/.test(vt(s.e)))say('Seite wechseln',true);else if(s.d>=40)say('Halbzeit',true)}
-  if(s.k==='work'&&sec===10&&s.d>=40&&!s.e.react)say('Noch zehn Sekunden',true);
+  if(s.k==='work'&&sec===Math.floor(s.d/2)&&!s.e.react){if(s.e.side||/Halbzeit/.test(vraw(s.e)))say(tr('Seite wechseln','Switch sides'),true);else if(s.d>=40)say(tr('Halbzeit','Halfway'),true)}
+  if(s.k==='work'&&sec===10&&s.d>=40&&!s.e.react)say(tr('Noch zehn Sekunden','Ten seconds left'),true);
  }
- if(s.k==='work'&&s.e.react&&now>=nextCmd&&S.rem>1500){const c=CMDS[Math.floor(Math.random()*CMDS.length)];$('#cmd').textContent=c+'!';say(c,true);nextCmd=now+1300+Math.random()*1200}
+ if(s.k==='work'&&s.e.react&&now>=nextCmd&&S.rem>1500){const c=CMDS[Math.floor(Math.random()*CMDS.length)];$('#cmd').textContent=tx(c)+'!';say(tx(c),true);nextCmd=now+1300+Math.random()*1200}
  if(S.rem<=0)advance();
  renderTime();
 }
@@ -506,39 +522,39 @@ function start(){
  if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
  try{actx&&actx.resume()}catch(e){}
  S.run=true;lastT=performance.now();
- if(!S.entered){S.entered=true;track('training-start-'+DAYS[day].s+'-w'+week);enter()}else say('Weiter geht es.',true);
+ if(!S.entered){S.entered=true;track('training-start-'+DAYS[day].s+'-w'+week);enter()}else say(tr('Weiter geht es.','Here we go again.'),true);
  timer=setInterval(tick,100);$('#go').textContent='Pause';
  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(w=>{wake=w}).catch(()=>{})}catch(e){}
 }
-$('#go').onclick=()=>{if(S.run){stop();$('#go').textContent='Fortsetzen';try{speechSynthesis.cancel()}catch(e){}}else start()};
+$('#go').onclick=()=>{if(S.run){stop();$('#go').textContent=tr('Fortsetzen','Resume');try{speechSynthesis.cancel()}catch(e){}}else start()};
 $('#skip').onclick=()=>{if(!S.fin){S.entered=true;advance();renderTime()}};
 $('#back').onclick=()=>{if(S.fin)return;let i=S.i-1;while(i>0&&S.segs[i].k!=='work')i--;S.i=Math.max(0,i);S.rem=cur().d*1000;S.entered=true;enter();renderTime()};
 $('#reset').onclick=()=>{try{speechSynthesis.cancel()}catch(e){}build()};
 $('#lvl').value=lvlSel;
 $('#lvl').onchange=e=>{lvlSel=e.target.value;me().lvl=lvlSel;save();build()};
-const setVoice=()=>{const b=$('#voice');b.setAttribute('aria-pressed',voice);b.textContent=voice?'Stimme an':'Stimme aus'};
+const setVoice=()=>{const b=$('#voice');b.setAttribute('aria-pressed',voice);b.textContent=voice?tr('Stimme an','Voice on'):tr('Stimme aus','Voice off')};
 $('#voice').onclick=()=>{voice=!voice;st.voice=voice;save();setVoice();if(!voice)try{speechSynthesis.cancel()}catch(e){}};
 setVoice();
 
 function renderWho(){
- $('#who').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<button class="chip who" data-p="${id}" aria-pressed="${st.sel.includes(id)}">${esc(p.name)}</button>`).join('')+'<a class="chip who add" href="#profil" aria-label="Kind hinzufügen">+ Kind</a>';
+ $('#who').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<button class="chip who" data-p="${id}" aria-pressed="${st.sel.includes(id)}">${esc(pn(p))}</button>`).join('')+`<a class="chip who add" href="#profil" aria-label="${tr('Kind hinzufügen','Add child')}">+ ${tr('Kind','Child')}</a>`;
  document.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{const id=b.dataset.p,on=st.sel.includes(id);
   if(on){if(st.sel.length===1)return;st.sel=st.sel.filter(x=>x!==id);if(st.cur===id)st.cur=st.sel[0]}else{st.sel.push(id);st.cur=id}
   save();week=me().week||1;lvlSel=me().lvl||'auto';$('#lvl').value=lvlSel;build();renderProg()});
- const P=parts();$('#whonote').textContent=P.length>1?`Gemeinsames Training: ${P.map(p=>p.name).join(', ')}. Woche und Stufe von ${me().name}, jedes Kind darf eine leichtere Variante wählen. Das Training wird bei allen eingetragen.`:'';
+ const P=parts();$('#whonote').textContent=P.length>1?tr(`Gemeinsames Training: ${P.map(pn).join(', ')}. Woche und Stufe von ${pn(me())}, jedes Kind darf eine leichtere Variante wählen. Das Training wird bei allen eingetragen.`,`Training together: ${P.map(pn).join(', ')}. Week and level from ${pn(me())}; each child may pick an easier variant. The session is logged for everyone.`):'';
 }
 function renderChips(){renderWho();
- $('#weeks').innerHTML=[1,2,3,4,5,6].map(w=>{const n=DAYS.filter((_,d)=>me().done[w+'-'+d]).length;return `<button class="chip${n===7?' done':''}" data-w="${w}" aria-pressed="${w===week}" title="${n} von 7 Tagen">${w}</button>`}).join('');
- $('#days').innerHTML=DAYS.map((d,i)=>`<button class="chip${me().done[week+'-'+i]?' done':''}" data-d="${i}" aria-pressed="${i===day}">${d.s}</button>`).join('');
+ $('#weeks').innerHTML=[1,2,3,4,5,6].map(w=>{const n=DAYS.filter((_,d)=>me().done[w+'-'+d]).length;return `<button class="chip${n===7?' done':''}" data-w="${w}" aria-pressed="${w===week}" title="${n} ${tr('von 7 Tagen','of 7 days')}">${w}</button>`}).join('');
+ $('#days').innerHTML=DAYS.map((d,i)=>`<button class="chip${me().done[week+'-'+i]?' done':''}" data-d="${i}" aria-pressed="${i===day}">${tx(d.s)}</button>`).join('');
  document.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{week=+b.dataset.w;me().week=week;save();build()});
  document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>{day=+b.dataset.d;build();renderProg()});
 }
 function renderPlan(){
  const D=DAYS[day],P=phase();
- const a=ageOf(me());$('#ptitle').textContent=`${D.n}: ${D.t} · Woche ${week} (${P.name})`;$('#plvl').textContent=`Stufe ${['Leicht','Normal','Schwer'][lvl()]}${lvlSel==='auto'?' (automatisch'+(a?', '+a+' Jahre':'')+')':''} für ${me().name}`;
+ const a=ageOf(me());$('#ptitle').textContent=`${tx(D.n)}: ${tx(D.t)} · ${tr('Woche','Week')} ${week} (${tx(P.name)})`;$('#plvl').textContent=`${tr('Stufe','Level')} ${[tr('Leicht','Easy'),'Normal',tr('Schwer','Hard')][lvl()]}${lvlSel==='auto'?' ('+tr('automatisch','automatic')+(a?', '+a+' '+tr('Jahre','years'):'')+')':''} ${tr('für','for')} ${pn(me())}`;
  $('#plan').innerHTML=B.map((b,bi)=>{
-  const t=b.m==='seq'?`${b.ex.length} × ${b.t[0]} s, ${b.t[1]} s Pause`:`${b.r} Runden im Wechsel · ${b.t[0]} s / ${b.t[1]} s Pause`;
-  return `<div class="card"><h3>${b.l}</h3><div class="t">${fmt(b.dur)} min · ${t}</div>${b.ex.map(e=>`<div class="ex" data-n="${e.n}">${figSVG(e.n,'th')}<b>${e.n}</b>${vt(e)?`<small>${vt(e)}</small>`:''}${e.side?'<span class="tag">Seitenwechsel</span>':''}${e.bb?'<span class="tag bb">Baseball</span>':''}${e.react?'<span class="tag">Ansage</span>':''}</div>`).join('')}</div>`}).join('');
+  const t=b.m==='seq'?`${b.ex.length} × ${b.t[0]} s, ${b.t[1]} s ${tr('Pause','rest')}`:`${b.r} ${tr('Runden im Wechsel','alternating rounds')} · ${b.t[0]} s / ${b.t[1]} s ${tr('Pause','rest')}`;
+  return `<div class="card"><h3>${b.l}</h3><div class="t">${fmt(b.dur)} min · ${t}</div>${b.ex.map(e=>`<div class="ex" data-n="${e.n}">${figSVG(e.n,'th')}<b>${exN(e)}</b>${vt(e)?`<small>${vt(e)}</small>`:''}${e.side?`<span class="tag">${tr('Seitenwechsel','Switch sides')}</span>`:''}${e.bb?'<span class="tag bb">Baseball</span>':''}${e.react?`<span class="tag">${tr('Ansage','Voice cue')}</span>`:''}</div>`).join('')}</div>`}).join('');
 }
 function renderTrack(){
  $('#track').innerHTML=B.map((b,i)=>`<div class="tb" style="--w:${b.dur}"><i id="tb${i}"></i></div>`).join('');
@@ -547,10 +563,10 @@ function renderTrack(){
 }
 function renderNow(){
  const s=cur();const fe=s.k==='work'?s.e:(s.nx&&s.nx.e);const fb=$('#fig');if(fe&&fb.dataset.n!==fe.n){fb.dataset.n=fe.n;fb.innerHTML=figSVG(fe.n,'main')}
- if(s.k==='work'){$('#blk').textContent=B[s.b].l;$('#name').textContent=s.e.n;const v=vt(s.e);$('#var').hidden=!v;$('#var').textContent=v?'Stufe: '+v:'';$('#hint').textContent=s.e.h;
-  const n=S.segs[S.i+2];$('#next').textContent=n&&n.e?'Danach: '+n.e.n:'Letzte Übung';$('#arc').style.stroke='var(--clay)';$('#kind').textContent='Arbeit'}
- else{const n=s.nx;$('#blk').textContent=s.k==='prep'?'Start':B[n.b].l;$('#name').textContent=s.k==='prep'?'Bereit machen':'Pause';$('#var').hidden=true;
-  $('#hint').textContent=n?'Als Nächstes: '+n.e.n+(vt(n.e)?' ('+vt(n.e)+')':'')+'. '+n.e.h:'';$('#next').textContent='';$('#arc').style.stroke='var(--rest)';$('#kind').textContent=s.k==='prep'?'Bereit':'Pause'}
+ if(s.k==='work'){$('#blk').textContent=B[s.b].l;$('#name').textContent=exN(s.e);const v=vt(s.e);$('#var').hidden=!v;$('#var').textContent=v?tr('Stufe: ','Level: ')+v:'';$('#hint').textContent=exH(s.e);
+  const n=S.segs[S.i+2];$('#next').textContent=n&&n.e?tr('Danach: ','Then: ')+exN(n.e):tr('Letzte Übung','Last exercise');$('#arc').style.stroke='var(--clay)';$('#kind').textContent=tr('Arbeit','Work')}
+ else{const n=s.nx;$('#blk').textContent=s.k==='prep'?'Start':B[n.b].l;$('#name').textContent=s.k==='prep'?tr('Bereit machen','Get ready'):tr('Pause','Rest');$('#var').hidden=true;
+  $('#hint').textContent=n?tr('Als Nächstes: ','Next up: ')+exN(n.e)+(vt(n.e)?' ('+vt(n.e)+')':'')+'. '+exH(n.e):'';$('#next').textContent='';$('#arc').style.stroke='var(--rest)';$('#kind').textContent=s.k==='prep'?tr('Bereit','Ready'):tr('Pause','Rest')}
  document.querySelectorAll('.ex').forEach(x=>x.classList.toggle('on',s.k==='work'&&x.dataset.n===s.e.n));
 }
 function renderTime(){
@@ -562,7 +578,7 @@ function renderTime(){
  B.forEach((b,bi)=>{const st0=S.segs.slice(0,S.segs.findIndex(x=>x.b===bi)).reduce((a,x)=>a+x.d,0);const p=Math.min(1,Math.max(0,(el-st0)/b.dur));const n=$('#tb'+bi);if(n)n.style.width=(p*100)+'%'});
 }
 function renderAll(){renderChips();renderPlan();renderTrack();renderNow();renderTime();$('#go').textContent='Start';$('#cmd').textContent='';
- const n=S.segs[1];$('#hint').textContent='Als Nächstes: '+n.e.n+(vt(n.e)?' ('+vt(n.e)+')':'')+'. '+n.e.h}
+ const n=S.segs[1];$('#hint').textContent=tr('Als Nächstes: ','Next up: ')+exN(n.e)+(vt(n.e)?' ('+vt(n.e)+')':'')+'. '+exH(n.e)}
 build();
 const DCH=[
  {id:'mo',n:'Push-ups',fig:'Push-ups',t:'r',dur:30,txt:'30 Sekunden: so viele saubere Push-ups wie möglich. Brust bis eine Faust über den Boden.'},
@@ -580,9 +596,9 @@ const CHK=[
  {id:'speed',l:'Schnelligkeit',n:'Shuttle Run 5 × 5 m',fig:'Shuttle Run',t:'s',low:1,txt:'Zwei Linien 5 m auseinander. Fünf Strecken, jede Linie mit der Hand berühren. Start tippen, laufen, Stopp tippen. Am besten stoppt jemand anderes.'}];
 const key=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const today=()=>key(new Date());
-const deDate=s=>s.split('-').reverse().join('.');
+const deDate=s=>lang==='en'?new Date(s+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):s.split('-').reverse().join('.');
 const dBetween=(a,b)=>Math.round((new Date(b)-new Date(a))/864e5);
-const fmtV=(v,T)=>v==null?'–':T.t==='r'?v+' Wdh.':T.t==='n'?String(v).replace('.',',')+' Fußl.':(Math.round(v*10)/10).toFixed(1).replace('.',',')+' s';
+const fmtV=(v,T)=>v==null?'–':T.t==='r'?v+tr(' Wdh.',' reps'):T.t==='n'?dec(v)+tr(' Fußl.',' feet'):dec((Math.round(v*10)/10).toFixed(1))+' s';
 const fs=(v,T)=>fmtV(v,T).replace(/\.$/,'');
 const better=(a,b,T)=>T.low?a<b:a>b;
 const bestOf=(arr,T)=>arr.reduce((m,x)=>m==null||better(x,m,T)?x:m,null);
@@ -592,89 +608,89 @@ $('#ovx').onclick=()=>{clearInterval(ot);ovShow(false);try{speechSynthesis.cance
 function ensureAudio(){if(!actx){try{actx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}try{actx&&actx.resume()}catch(e){}}
 function runTest(T,label,hist,cb){
  clearInterval(ot);ovShow(true);
- $('#ovk').textContent=label;$('#ovt').textContent=T.n;$('#ovf').innerHTML=figSVG(T.fig,'main');
+ $('#ovk').textContent=label;$('#ovt').textContent=tx(T.n);$('#ovf').innerHTML=figSVG(T.fig,'main');
  const vals=hist.map(x=>x.v),b=bestOf(vals,T),l=vals[vals.length-1];
- $('#ovd').textContent=T.txt;
- $('#ovm').textContent=vals.length?`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`:'Erster Versuch: Dein Wert wird zur Messlatte.';
+ $('#ovd').textContent=tx(T.txt);
+ $('#ovm').textContent=vals.length?tr(`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`,`Last time: ${fs(l,T)}. Your record: ${fs(b,T)}.`):tr('Erster Versuch: Dein Wert wird zur Messlatte.','First try: your value becomes the benchmark.');
  $('#ovn').textContent='';$('#ovin').innerHTML='';
  const B=$('#ovb');
  if(T.t==='n'){input(T,l??0,cb);return}
- B.innerHTML='<button class="btn go" id="ovgo">Los</button>';
- $('#ovgo').onclick=()=>{ensureAudio();say(T.n+'. Achtung.',true);let c=3;$('#ovn').textContent=c;beep(520,.12);B.innerHTML='';
+ B.innerHTML=`<button class="btn go" id="ovgo">${tr('Los','Go')}</button>`;
+ $('#ovgo').onclick=()=>{ensureAudio();say(tx(T.n)+tr('. Achtung.','. Get set.'),true);let c=3;$('#ovn').textContent=c;beep(520,.12);B.innerHTML='';
   ot=setInterval(()=>{c--;if(c>0){$('#ovn').textContent=c;beep(520,.12)}else{clearInterval(ot);go()}},1000)};
  function go(){beep(880,.45);const t0=performance.now();
   if(T.t==='r'){let lastS=T.dur;$('#ovn').textContent=T.dur;
    ot=setInterval(()=>{const r=Math.max(0,T.dur-(performance.now()-t0)/1000),s=Math.ceil(r);
-    if(s!==lastS){lastS=s;if(s<=3&&s>=1)beep(s===1?740:520,.12);if(s===Math.floor(T.dur/2))say('Halbzeit',true)}
+    if(s!==lastS){lastS=s;if(s<=3&&s>=1)beep(s===1?740:520,.12);if(s===Math.floor(T.dur/2))say(tr('Halbzeit','Halfway'),true)}
     $('#ovn').textContent=s;
-    if(r<=0){clearInterval(ot);beep(990,.6);say('Stopp! Wie viele hast du geschafft?',true);input(T,l??0,cb)}},100);
-  }else{say('Los!',true);B.innerHTML='<button class="btn go big2" id="ovst">Stopp</button>';
-   ot=setInterval(()=>{$('#ovn').textContent=((performance.now()-t0)/1000).toFixed(1).replace('.',',')},100);
+    if(r<=0){clearInterval(ot);beep(990,.6);say(tr('Stopp! Wie viele hast du geschafft?','Stop! How many did you do?'),true);input(T,l??0,cb)}},100);
+  }else{say(tr('Los!','Go!'),true);B.innerHTML=`<button class="btn go big2" id="ovst">${tr('Stopp','Stop')}</button>`;
+   ot=setInterval(()=>{$('#ovn').textContent=dec(((performance.now()-t0)/1000).toFixed(1))},100);
    $('#ovst').onclick=()=>{clearInterval(ot);const v=Math.round((performance.now()-t0)/100)/10;beep(990,.4);$('#ovn').textContent=fmtV(v,T);
-    B.innerHTML='<button class="btn go" id="ovsv">Speichern</button><button class="btn" id="ovre">Nochmal</button>';
+    B.innerHTML=`<button class="btn go" id="ovsv">${tr('Speichern','Save')}</button><button class="btn" id="ovre">${tr('Nochmal','Again')}</button>`;
     $('#ovsv').onclick=()=>cb(v);$('#ovre').onclick=()=>runTest(T,label,hist,cb)}}
  }
 }
 function input(T,start,cb){
  const s0=T.step||1;
- $('#ovin').innerHTML=`<p class="hint">${T.t==='n'?'Bester Versuch in Fußlängen':'Nur saubere Wiederholungen zählen.'}</p><div class="step"><button class="btn" data-s="-1" aria-label="weniger">−</button><input id="ovv" type="number" inputmode="decimal" min="0" step="${s0}" value="${start}" aria-label="Wert"><button class="btn" data-s="1" aria-label="mehr">+</button></div>`;
+ $('#ovin').innerHTML=`<p class="hint">${T.t==='n'?tr('Bester Versuch in Fußlängen','Best attempt in foot lengths'):tr('Nur saubere Wiederholungen zählen.','Only clean reps count.')}</p><div class="step"><button class="btn" data-s="-1" aria-label="${tr('weniger','less')}">−</button><input id="ovv" type="number" inputmode="decimal" min="0" step="${s0}" value="${start}" aria-label="${tr('Wert','Value')}"><button class="btn" data-s="1" aria-label="${tr('mehr','more')}">+</button></div>`;
  $('#ovin').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const i=$('#ovv');i.value=Math.max(0,Math.round(((+i.value||0)+s0*b.dataset.s)*10)/10)});
- $('#ovb').innerHTML='<button class="btn go" id="ovsv">Speichern</button>';
+ $('#ovb').innerHTML=`<button class="btn go" id="ovsv">${tr('Speichern','Save')}</button>`;
  $('#ovsv').onclick=()=>cb(Math.max(0,+String($('#ovv').value).replace(',','.')||0));
 }
 function showResult(T,v,prev,next,who){
  clearInterval(ot);const b=bestOf(prev,T),l=prev[prev.length-1],rec=prev.length&&better(v,b,T);
  $('#ovn').textContent=fmtV(v,T);$('#ovin').innerHTML='';$('#ovf').innerHTML='';$('#ovd').textContent='';
- $('#ovt').textContent=(rec?'Neuer Rekord!':T.n)+(who?' ('+who+')':'');if(who)$('#ovk').textContent=who;
- $('#ovm').textContent=!prev.length?'Erster Wert gespeichert. Ab jetzt trittst du gegen diese Zahl an.':rec?`Bisheriger Rekord: ${fs(b,T)}.`:`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`;
- if(rec){say('Neuer Rekord!',true);beep(660,.2);setTimeout(()=>beep(990,.5),220)}
- $('#ovb').innerHTML=next?'<button class="btn go" id="ovnx">'+(who?'Nächstes Kind':'Weiter')+'</button>':'<button class="btn go" id="ovok">Fertig</button>';
+ $('#ovt').textContent=(rec?tr('Neuer Rekord!','New record!'):tx(T.n))+(who?' ('+who+')':'');if(who)$('#ovk').textContent=who;
+ $('#ovm').textContent=!prev.length?tr('Erster Wert gespeichert. Ab jetzt trittst du gegen diese Zahl an.','First value saved. From now on you compete against this number.'):rec?tr(`Bisheriger Rekord: ${fs(b,T)}.`,`Previous record: ${fs(b,T)}.`):tr(`Letztes Mal: ${fs(l,T)}. Dein Rekord: ${fs(b,T)}.`,`Last time: ${fs(l,T)}. Your record: ${fs(b,T)}.`);
+ if(rec){say(tr('Neuer Rekord!','New record!'),true);beep(660,.2);setTimeout(()=>beep(990,.5),220)}
+ $('#ovb').innerHTML=next?'<button class="btn go" id="ovnx">'+(who?tr('Nächstes Kind','Next child'):tr('Weiter','Next'))+'</button>':`<button class="btn go" id="ovok">${tr('Fertig','Done')}</button>`;
  if(next)$('#ovnx').onclick=next;else $('#ovok').onclick=()=>ovShow(false);
 }
 function startDaily(){const ids=st.sel.slice(),T=DCH[day],multi=ids.length>1;let i=0;
  const next=()=>{if(i>=ids.length)return;const p=st.profiles[ids[i++]],h=p.daily[T.id]||(p.daily[T.id]=[]);
-  if(multi)say('Jetzt '+p.name,true);
-  runTest(T,multi?`Challenge des Tages: jetzt ${p.name}`:`Challenge des Tages (${DAYS[day].n})`,h,v=>{const prev=h.map(x=>x.v);h.push({d:today(),w:p.week||1,v});save();track('challenge-'+T.id);showResult(T,v,prev,i<ids.length?next:null,multi?p.name:'');renderProg()})};
+  if(multi)say(tr('Jetzt ','Now ')+p.name,true);
+  runTest(T,multi?tr(`Challenge des Tages: jetzt ${p.name}`,`Challenge of the day: now ${p.name}`):tr(`Challenge des Tages (${tx(DAYS[day].n)})`,`Challenge of the day (${tx(DAYS[day].n)})`),h,v=>{const prev=h.map(x=>x.v);h.push({d:today(),w:p.week||1,v});save();track('challenge-'+T.id);showResult(T,v,prev,i<ids.length?next:null,multi?p.name:'');renderProg()})};
  next()}
 function startCheck(){const ids=st.sel.slice(),multi=ids.length>1;let k=0;
  const nextP=()=>{if(k>=ids.length)return;checkFor(st.profiles[ids[k++]],multi,k<ids.length?nextP:null)};nextP()}
-function checkFor(m,multi,after){const res={};let i=0;if(multi)say('Athletik-Check. Jetzt '+m.name,true);
+function checkFor(m,multi,after){const res={};let i=0;if(multi)say(tr('Athletik-Check. Jetzt ','Athletics Check. Now ')+m.name,true);
  const step=()=>{if(i>=CHK.length){m.checks.push({d:today(),w:m.week||1,v:res});save();track('athletik-check');renderProg();checkDone(m,after);return}
   const T=CHK[i],prev=m.checks.map(c=>c.v[T.id]).filter(x=>x!=null);
-  runTest(T,`${multi?m.name+': ':''}Athletik-Check ${i+1} von ${CHK.length}: ${T.l}`,prev.map(v=>({v})),v=>{res[T.id]=v;i++;showResult(T,v,prev,step)})};
+  runTest(T,`${multi?m.name+': ':''}${tr('Athletik-Check','Athletics Check')} ${i+1} ${tr('von','of')} ${CHK.length}: ${tx(T.l)}`,prev.map(v=>({v})),v=>{res[T.id]=v;i++;showResult(T,v,prev,step)})};
  step()}
 function checkDone(m,after){const n=m.checks.length;
- $('#ovk').textContent='Athletik-Check';$('#ovt').textContent='Check gespeichert';$('#ovn').textContent='';$('#ovt').textContent='Check gespeichert: '+m.name;$('#ovf').innerHTML=radar(m);$('#ovd').textContent='';
- $('#ovm').textContent=n>1?'Orange: dein Check von heute. Gestrichelt: dein erster Check.':'Das ist deine Ausgangslinie. Beim nächsten Check siehst du hier den Vergleich.';
- $('#ovin').innerHTML='';$('#ovb').innerHTML=after?'<button class="btn go" id="ovok">Nächstes Kind</button>':'<button class="btn go" id="ovok">Fertig</button>';$('#ovok').onclick=after||(()=>ovShow(false))}
+ $('#ovk').textContent=tr('Athletik-Check','Athletics Check');$('#ovn').textContent='';$('#ovt').textContent=tr('Check gespeichert: ','Check saved: ')+m.name;$('#ovf').innerHTML=radar(m);$('#ovd').textContent='';
+ $('#ovm').textContent=n>1?tr('Farbig: dein Check von heute. Gestrichelt: dein erster Check.',"Coloured: today's check. Dashed: your first check."):tr('Das ist deine Ausgangslinie. Beim nächsten Check siehst du hier den Vergleich.',"This is your baseline. At your next check you'll see the comparison here.");
+ $('#ovin').innerHTML='';$('#ovb').innerHTML=`<button class="btn go" id="ovok">${after?tr('Nächstes Kind','Next child'):tr('Fertig','Done')}</button>`;$('#ovok').onclick=after||(()=>ovShow(false))}
 function radar(m=me()){const C=m.checks;if(!C.length)return'';const f=C[0].v,c=C[C.length-1].v,n=CHK.length,cx=160,cy=138,R=92;
  const pt=(i,r)=>{const a=-Math.PI/2+i*2*Math.PI/n;return[cx+Math.cos(a)*R*r,cy+Math.sin(a)*R*r]};
  const sc=(T,v)=>{const r=f[T.id];if(!r||!v)return .6;return Math.max(.08,Math.min(1,.6*(T.low?r/v:v/r)))};
  const poly=fn=>CHK.map((T,i)=>pt(i,fn(T)).map(x=>x.toFixed(1)).join(',')).join(' ');
  let g='';[.2,.4,.6,.8,1].forEach(r=>g+=`<polygon points="${poly(()=>r)}" fill="none" stroke="var(--line)"/>`);
- CHK.forEach((T,i)=>{const[x,y]=pt(i,1),[lx,ly]=pt(i,1.24);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--line)"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="600" fill="var(--ink)">${T.l}</text>`});
+ CHK.forEach((T,i)=>{const[x,y]=pt(i,1),[lx,ly]=pt(i,1.24);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--line)"/><text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="14" font-weight="600" fill="var(--ink)">${tx(T.l)}</text>`});
  g+=`<polygon points="${poly(()=>.6)}" fill="none" stroke="var(--mute)" stroke-width="2" stroke-dasharray="5 4"/>`;
  if(C.length>1)g+=`<polygon points="${poly(T=>sc(T,c[T.id]))}" fill="color-mix(in srgb, var(--clay) 22%, transparent)" stroke="var(--clay)" stroke-width="3" stroke-linejoin="round"/>`;
- return `<svg class="radar" viewBox="0 0 320 270" role="img" aria-label="Vergleich erster und letzter Athletik-Check">${g}</svg>`}
+ return `<svg class="radar" viewBox="0 0 320 270" role="img" aria-label="${tr('Vergleich erster und letzter Athletik-Check','First and latest Athletics Check compared')}">${g}</svg>`}
 function checkTable(){const C=me().checks;if(!C.length)return'';const f=C[0].v,c=C[C.length-1].v,two=C.length>1;
- return `<table class="ct"><thead><tr><th>Bereich</th><th class="r">Erster</th><th class="r">Letzter</th><th class="r">Verände&shy;rung</th></tr></thead><tbody>${CHK.map(T=>{const a=f[T.id],b=c[T.id],ch=two&&a&&b?Math.round(((T.low?a/b:b/a)-1)*100):null;
-  return `<tr><td>${T.l}</td><td class="r">${fmtV(a,T)}</td><td class="r">${two?fmtV(b,T):'–'}</td><td class="r">${ch==null?'–':(ch>0?'+':'')+ch+' %'}</td></tr>`}).join('')}</tbody></table>`}
+ return `<table class="ct"><thead><tr><th>${tr('Bereich','Area')}</th><th class="r">${tr('Erster','First')}</th><th class="r">${tr('Letzter','Latest')}</th><th class="r">${tr('Verände&shy;rung','Change')}</th></tr></thead><tbody>${CHK.map(T=>{const a=f[T.id],b=c[T.id],ch=two&&a&&b?Math.round(((T.low?a/b:b/a)-1)*100):null;
+  return `<tr><td>${tx(T.l)}</td><td class="r">${fmtV(a,T)}</td><td class="r">${two?fmtV(b,T):'–'}</td><td class="r">${ch==null?'–':(ch>0?'+':'')+ch+' %'}</td></tr>`}).join('')}</tbody></table>`}
 function spark(vals,T){if(vals.length<2)return'';const w=220,h=50,mn=Math.min(...vals),mx=Math.max(...vals),rg=mx-mn||1;
  const xs=i=>8+i*(w-16)/(vals.length-1),ys=v=>T.low?8+(v-mn)/rg*(h-16):h-8-(v-mn)/rg*(h-16);
  return `<svg class="spk" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline points="${vals.map((v,i)=>xs(i).toFixed(1)+','+ys(v).toFixed(1)).join(' ')}" fill="none" stroke="var(--grass2)" stroke-width="3" stroke-linejoin="round"/><circle cx="${xs(vals.length-1).toFixed(1)}" cy="${ys(vals[vals.length-1]).toFixed(1)}" r="5" fill="var(--clay)"/></svg>`}
 function streak(){const D=me().days,d=new Date();let n=0;if(!D[key(d)])d.setDate(d.getDate()-1);
  for(let i=0;i<500;i++){const k=key(d),wd=d.getDay();if(D[k]){if(D[k]==='t')n++}else break;d.setDate(d.getDate()-1)}return n}
 function renderProg(){const m=me(),td=today();
- const ag=ageOf(m);$('#pname').textContent=m.name+(ag?' ('+ag+')':'');$('#page').placeholder=ag?'Alter: '+ag:'Alter';$('#pdel').hidden=Object.keys(st.profiles).length<2;$('#pdel').textContent='Profil löschen';$('#pdel').dataset.c='';
- $('#prof').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<option value="${id}"${id===st.cur?' selected':''}>${esc(p.name)}</option>`).join('');
+ const ag=ageOf(m);$('#pname').textContent=pn(m)+(ag?' ('+ag+')':'');$('#page').placeholder=ag?tr('Alter: ','Age: ')+ag:tr('Alter','Age');$('#pdel').hidden=Object.keys(st.profiles).length<2;$('#pdel').textContent=tr('Profil löschen','Delete profile');$('#pdel').dataset.c='';
+ $('#prof').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<option value="${id}"${id===st.cur?' selected':''}>${esc(pn(p))}</option>`).join('');
  $('#streak').textContent=streak();
- $('#pause').textContent=m.days[td]==='t'?'Heute trainiert':m.days[td]==='p'?'Pause-Tag zurücknehmen':'Heute Pause (Spiel, Turnier oder krank)';
+ $('#pause').textContent=m.days[td]==='t'?tr('Heute trainiert','Trained today'):m.days[td]==='p'?tr('Pause-Tag zurücknehmen','Undo rest day'):tr('Heute Pause (Spiel, Turnier oder krank)','Rest day today (game, tournament or ill)');
  $('#pause').disabled=m.days[td]==='t';
- $('#chal').textContent=$('#chal2').textContent='Challenge: '+DCH[day].n;
+ $('#chal').textContent=$('#chal2').textContent='Challenge: '+tx(DCH[day].n);
  $('#dch').innerHTML=DCH.map((T,i)=>{const v=(m.daily[T.id]||[]).map(x=>x.v),b=bestOf(v,T);
-  return `<div class="card pc${i===day?' today':''}"><h3>${DAYS[i].s}: ${T.n}</h3><div class="t">${T.t==='r'?T.dur+' s, Wiederholungen':'Haltezeit'}</div>${v.length?`<div class="kv"><span>Rekord <b>${fmtV(b,T)}</b></span><span>Zuletzt <b>${fmtV(v[v.length-1],T)}</b></span><span>${v.length}× gemessen</span></div>${spark(v,T)}`:'<p class="next">Noch kein Wert.</p>'}</div>`}).join('');
+  return `<div class="card pc${i===day?' today':''}"><h3>${tx(DAYS[i].s)}: ${tx(T.n)}</h3><div class="t">${T.t==='r'?T.dur+tr(' s, Wiederholungen',' s, reps'):tr('Haltezeit','Hold time')}</div>${v.length?`<div class="kv"><span>${tr('Rekord','Record')} <b>${fmtV(b,T)}</b></span><span>${tr('Zuletzt','Last')} <b>${fmtV(v[v.length-1],T)}</b></span><span>${v.length}× ${tr('gemessen','measured')}</span></div>${spark(v,T)}`:`<p class="next">${tr('Noch kein Wert.','No value yet.')}</p>`}</div>`}).join('');
  const C=m.checks,last=C[C.length-1],due=!last||dBetween(last.d,td)>=13;
- $('#chk').innerHTML=`<div class="chkg"><div>${C.length?radar():'<p class="next">Noch kein Check. Der erste Check ist deine Ausgangslinie.</p>'}</div><div>${checkTable()}<p class="next">${C.length?`${C.length} Check${C.length>1?'s':''}, zuletzt am ${deDate(last.d)}. `:''}${due?'<b>Ein Check ist fällig.</b>':'Nächster Check in etwa zwei Wochen.'}</p><button class="btn go" id="chkgo">Athletik-Check starten</button></div></div>`;
+ $('#chk').innerHTML=`<div class="chkg"><div>${C.length?radar():`<p class="next">${tr('Noch kein Check. Der erste Check ist deine Ausgangslinie.','No check yet. Your first check is your baseline.')}</p>`}</div><div>${checkTable()}<p class="next">${C.length?`${C.length} Check${C.length>1?'s':''}, ${tr('zuletzt am','last on')} ${deDate(last.d)}. `:''}${due?tr('<b>Ein Check ist fällig.</b>','<b>A check is due.</b>'):tr('Nächster Check in etwa zwei Wochen.','Next check in about two weeks.')}</p><button class="btn go" id="chkgo">${tr('Athletik-Check starten','Start Athletics Check')}</button></div></div>`;
  $('#chkgo').onclick=startCheck;
 }
 $('#chal').onclick=startDaily;$('#chal2').onclick=startDaily;
@@ -685,15 +701,17 @@ const switchProf=id=>{st.cur=id;if(!st.sel.includes(id))st.sel=[id];save();week=
 $('#prof').onchange=e=>switchProf(e.target.value);
 $('#padd').onclick=()=>{const n=$('#pnew').value.trim();if(!n){$('#pnew').focus();return}const id='p'+Date.now();st.profiles[id]=newProf(n,ageIn());$('#pnew').value='';$('#page').value='';switchProf(id)};
 $('#pren').onclick=()=>{const n=$('#pnew').value.trim(),a=ageIn();if(!n&&!a){$('#pnew').focus();return}if(n)me().name=n;if(a){me().age=a;me().ageSet=Date.now()}$('#pnew').value='';$('#page').value='';save();build();renderProg()};
-$('#pdel').onclick=()=>{const b=$('#pdel');if(Object.keys(st.profiles).length<2)return;if(!b.dataset.c){b.dataset.c='1';b.textContent=`Wirklich „${me().name}“ löschen? Nochmal tippen`;return}
+$('#pdel').onclick=()=>{const b=$('#pdel');if(Object.keys(st.profiles).length<2)return;if(!b.dataset.c){b.dataset.c='1';b.textContent=tr(`Wirklich „${me().name}“ löschen? Nochmal tippen`,`Really delete “${me().name}”? Tap again`);return}
  const id=st.cur;delete st.profiles[id];st.sel=st.sel.filter(x=>x!==id);const nid=st.sel[0]||Object.keys(st.profiles)[0];if(!st.sel.length)st.sel=[nid];switchProf(nid)};
 $('#bkcp').onclick=()=>{const code=btoa(unescape(encodeURIComponent(JSON.stringify(me()))));
- const ok=()=>$('#bkmsg').textContent='Sicherungscode kopiert. Auf dem anderen Gerät einfügen und „Code laden“ tippen.';
- const fb=()=>{$('#bktx').value=code;$('#bktx').select();$('#bkmsg').textContent='Der Code steht im Feld. Bitte markieren und kopieren.'};
+ const ok=()=>$('#bkmsg').textContent=tr('Sicherungscode kopiert. Auf dem anderen Gerät einfügen und „Code laden“ tippen.','Backup code copied. Paste it on the other device and tap “Load code”.');
+ const fb=()=>{$('#bktx').value=code;$('#bktx').select();$('#bkmsg').textContent=tr('Der Code steht im Feld. Bitte markieren und kopieren.','The code is in the field. Please select and copy it.')};
  try{navigator.clipboard.writeText(code).then(ok,fb)}catch(e){fb()}};
 $('#bkld').onclick=()=>{try{const p=JSON.parse(decodeURIComponent(escape(atob($('#bktx').value.trim()))));if(!p||!p.name||!p.daily)throw 0;
- const ex=Object.keys(st.profiles).find(id=>st.profiles[id].name===p.name);const id=ex||('p'+Date.now());st.profiles[id]=Object.assign(newProf(p.name),p);$('#bktx').value='';$('#bkmsg').textContent=`Profil „${p.name}“ geladen.`;switchProf(id)}
- catch(e){$('#bkmsg').textContent='Der Code ist ungültig. Bitte vollständig einfügen.'}};
+ const ex=Object.keys(st.profiles).find(id=>st.profiles[id].name===p.name);const id=ex||('p'+Date.now());st.profiles[id]=Object.assign(newProf(p.name),p);$('#bktx').value='';$('#bkmsg').textContent=tr(`Profil „${p.name}“ geladen.`,`Profile “${p.name}” loaded.`);switchProf(id)}
+ catch(e){$('#bkmsg').textContent=tr('Der Code ist ungültig. Bitte vollständig einfügen.','The code is invalid. Please paste it completely.')}};
+document.querySelectorAll('[data-lang]').forEach(b=>b.onclick=()=>{if(b.dataset.lang===lang)return;lang=b.dataset.lang;try{localStorage.setItem('ath10lang',lang)}catch(e){}
+ try{speechSynthesis.cancel()}catch(e){}applyStatic();setVoice();build();renderProg();track('sprache-'+lang)});
 renderProg();
 }
 </script>
