@@ -467,8 +467,18 @@ let S,B,timer=null,actx=null,wake=null,lastT=0,nextCmd=0,deVoice=null,enVoice=nu
 
 function pickVoice(){const v=speechSynthesis.getVoices();deVoice=v.find(x=>/^de/i.test(x.lang))||null;enVoice=v.find(x=>/^en[-_]GB/i.test(x.lang))||v.find(x=>/^en/i.test(x.lang))||null}
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
-function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis,u=new SpeechSynthesisUtterance(t);u.lang=lang==='en'?'en-GB':'de-DE';const vv=lang==='en'?enVoice:deVoice;if(vv)u.voice=vv;u.rate=1.02;
- if(cut&&(ss.speaking||ss.pending)){ss.cancel();setTimeout(()=>{try{ss.speak(u)}catch(e){}},90)}else{if(ss.paused)ss.resume();ss.speak(u)}}catch(e){}}
+const EN_SAY={'Y-T-W':'Y, T, W','High-Knees-Sprint':'High Knees Sprint','Slow-Motion-Squats':'Slow Motion Squats','Superman-Hold':'Superman Hold','Push-ups':'push-ups','Push-up':'push-up','Push-off':'push-off'};
+const EN_TERMS=['High-Knees-Sprint','High Knees','Slow-Motion-Squats','Lateral Shuffle','Lateral Lunges','Lateral Bounds','Decline Push-ups','Plank Shoulder Taps','Hollow Body Hold','Mountain Climbers','Reverse Lunge','Jumping Jacks','Jump Lunges','Squat Jumps','Broad Jumps','Split Squat','Glute Bridge','Shuttle Run','Quick Feet','Dot Drill','Bear Crawl','Bird Dog','Box Step','Wall Sit','Dead Bug','Plank Jacks','Plank March','Flutter Kicks','Superman-Hold','Inchworm','Burpees','Push-ups','Push-up','Push-off','Y-T-W','Ready Position','Infield','Fielder','Pitching','Finisher','Challenge','Diamond','Power','Swing'];
+const EN_RX=new RegExp('(?<![A-Za-zÄÖÜäöüß])('+EN_TERMS.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![A-Za-zäöüß])','g');
+function chunks(t){if(lang==='en')return[[t,'en']];const out=[];let last=0,m;EN_RX.lastIndex=0;
+ while((m=EN_RX.exec(t))){if(m.index>last)out.push([t.slice(last,m.index),'de']);out.push([EN_SAY[m[1]]||m[1].replace(/-/g,' '),'en']);last=m.index+m[1].length}
+ if(last<t.length)out.push([t.slice(last),'de']);
+ const res=[];for(const [x,l] of out){if(/^[\s,.:;!?&-]+$/.test(x)){if(res.length)res[res.length-1][0]+=x.replace(/[&-]/g,'').trim();continue}res.push([l==='de'?x.replace(/^-/,''):x,l])}
+ return res.filter(([x])=>x.trim())}
+function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis;
+ const us=chunks(t).map(([x,l])=>{const u=new SpeechSynthesisUtterance(x);u.lang=l==='en'?'en-GB':'de-DE';const vv=l==='en'?enVoice:deVoice;if(vv)u.voice=vv;u.rate=1.02;return u});
+ const go=()=>{for(const u of us){try{ss.speak(u)}catch(e){}}};
+ if(cut&&(ss.speaking||ss.pending)){ss.cancel();setTimeout(go,90)}else{if(ss.paused)ss.resume();go()}}catch(e){}}
 const busy=()=>{try{return speechSynthesis.speaking||speechSynthesis.pending}catch(e){return false}};
 function beep(f,d){if(!actx)return;try{const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=f;o.connect(g);g.connect(actx.destination);const n=actx.currentTime;g.gain.setValueAtTime(.25,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.start(n);o.stop(n+d)}catch(e){}}
 
