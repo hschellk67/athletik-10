@@ -131,6 +131,7 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
 .sub2{margin:10px 0 0;color:var(--gold);font-weight:600;min-height:0}.sub2:empty{display:none}
 .chip.add{display:inline-flex;align-items:center;text-decoration:none;border-style:dashed}
 #page{width:110px}
+.vinfo{font-size:13px;color:#cfc3ad;margin-top:6px;max-width:260px}.vinfo:empty{display:none}
 @media(max-width:700px){.stage{grid-template-columns:minmax(0,1fr)}.ring{max-width:260px}.plan{grid-template-columns:minmax(0,1fr)}.now{text-align:center}.chkg{grid-template-columns:minmax(0,1fr)}.radar{margin:auto}.ct{font-size:13px}.figbox{margin-inline:auto}.ring{max-width:220px}.hint{margin-inline:auto}.btns{justify-content:center}}
 @media(prefers-reduced-motion:no-preference){#arc{transition:stroke-dashoffset .12s linear}}
 </style>
@@ -144,7 +145,7 @@ svg[data-fig] .fl{stroke:var(--line);stroke-width:2}
     <div class="grp"><label data-i="lWeek">Woche</label><div class="chips" id="weeks"></div></div>
     <div class="grp"><label data-i="lDay">Tag</label><div class="chips" id="days"></div></div>
     <div class="grp"><label for="lvl" data-i="lLvl">Stufe</label><select id="lvl"><option value="auto" data-i="oAuto">Automatisch</option><option value="0" data-i="oEasy">Leicht</option><option value="1">Normal</option><option value="2" data-i="oHard">Schwer</option></select></div>
-    <div class="grp"><label data-i="lVoice">Ansage</label><div class="chips"><button class="tog" id="voice" aria-pressed="true">Stimme an</button><button class="tog" id="vtest" data-i="bTest">Test</button></div></div>
+    <div class="grp"><label data-i="lVoice">Ansage</label><div class="chips"><button class="tog" id="voice" aria-pressed="true">Stimme an</button><button class="tog" id="vtest" data-i="bTest">Test</button></div><div class="vinfo" id="vinfo"></div></div>
     <div class="grp"><label>Challenge</label><a class="tog lk" href="#fortschritt" data-i="lkProg">Mein Fortschritt</a></div>
     <div class="grp"><label data-i="lLang">Sprache</label><div class="chips"><button class="chip" data-lang="de" aria-label="Deutsch">DE</button><button class="chip" data-lang="en" aria-label="English">EN</button></div></div>
   </div>
@@ -487,11 +488,12 @@ function pickVoice(){const v=speechSynthesis.getVoices();if(!v.length)return;deV
 if('speechSynthesis' in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 const EN_SAY={'Y-T-W':'Y, T, W','High-Knees-Sprint':'High Knees Sprint','Slow-Motion-Squats':'Slow Motion Squats','Superman-Hold':'Superman Hold','Push-ups':'push-ups','Push-up':'push-up','Push-off':'push-off'};
 const EN_TERMS=['High-Knees-Sprint','High Knees','Slow-Motion-Squats','Lateral Shuffle','Lateral Lunges','Lateral Bounds','Decline Push-ups','Plank Shoulder Taps','Hollow Body Hold','Mountain Climbers','Reverse Lunge','Jumping Jacks','Jump Lunges','Squat Jumps','Broad Jumps','Split Squat','Glute Bridge','Shuttle Run','Quick Feet','Dot Drill','Bear Crawl','Bird Dog','Box Step','Wall Sit','Dead Bug','Plank Jacks','Plank March','Flutter Kicks','Superman-Hold','Inchworm','Burpees','Push-ups','Push-up','Push-off','Y-T-W','Ready Position','Infield','Fielder','Pitching','Finisher','Challenge','Diamond','Power','Swing'];
+const EN_PHON={"High-Knees-Sprint": "Hai Nies Sprint", "High Knees": "Hai Nies", "Slow-Motion-Squats": "Slou Mouschen Skwotts", "Lateral Shuffle": "Läteral Schaffel", "Lateral Lunges": "Läteral Landsches", "Lateral Bounds": "Läteral Baunds", "Decline Push-ups": "Diklain Puschaps", "Plank Shoulder Taps": "Plänk Schoulder Täps", "Hollow Body Hold": "Hollou Boddi Hould", "Mountain Climbers": "Mauntn Klaimers", "Reverse Lunge": "Riwörs Landsch", "Jumping Jacks": "Dschamping Dschäcks", "Jump Lunges": "Dschamp Landsches", "Squat Jumps": "Skwott Dschamps", "Broad Jumps": "Brohd Dschamps", "Split Squat": "Split Skwott", "Glute Bridge": "Gluht Bridsch", "Shuttle Run": "Schattl Ran", "Quick Feet": "Kwick Fiet", "Dot Drill": "Dott Drill", "Bear Crawl": "Bär Krohl", "Bird Dog": "Börd Dogg", "Box Step": "Box Step", "Wall Sit": "Wohl Sitt", "Dead Bug": "Dedd Bagg", "Plank Jacks": "Plänk Dschäcks", "Plank March": "Plänk Martsch", "Flutter Kicks": "Flatter Kicks", "Superman-Hold": "Supermän Hould", "Inchworm": "Intsch Wörm", "Burpees": "Börpies", "Push-ups": "Puschaps", "Push-up": "Puschap", "Push-off": "Pusch off", "Y-T-W": "Wai, Ti, Dabbelju", "Ready Position": "Reddi Posischen", "Infield": "Infield", "Fielder": "Fielder", "Pitching": "Pitsching", "Finisher": "Finischer", "Challenge": "Tschällendsch", "Diamond": "Daimond", "Power": "Pauer", "Swing": "Swing"};
 const EN_RX=new RegExp('(?<![A-Za-zÄÖÜäöüß])('+EN_TERMS.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![A-Za-zäöüß])','g');
 function chunks(t){if(lang==='en')return[[t,'en']];const out=[];let last=0,m;EN_RX.lastIndex=0;
- while((m=EN_RX.exec(t))){if(m.index>last)out.push([t.slice(last,m.index),'de']);out.push([EN_SAY[m[1]]||m[1].replace(/-/g,' '),'en']);last=m.index+m[1].length}
+ while((m=EN_RX.exec(t))){if(m.index>last)out.push([t.slice(last,m.index),'de']);if(!enVoice)out.push([EN_PHON[m[1]]||m[1].replace(/-/g,' '),'de']);else out.push([EN_SAY[m[1]]||m[1].replace(/-/g,' '),'en']);last=m.index+m[1].length}
  if(last<t.length)out.push([t.slice(last),'de']);
- const res=[];for(const [x,l] of out){if(/^[\s,.:;!?&-]+$/.test(x)){if(res.length)res[res.length-1][0]+=x.replace(/[&-]/g,'').trim();continue}res.push([l==='de'?x.replace(/^-/,''):x,l])}
+ const res=[];for(const [x,l] of out){if(/^[\s,.:;!?&-]+$/.test(x)){if(res.length)res[res.length-1][0]+=x.replace(/[&-]/g,'').trim();continue}const y=l==='de'?x.replace(/^-/,''):x;if(res.length&&res[res.length-1][1]===l){const q=res[res.length-1];q[0]+=(/\s$/.test(q[0])||/^\s/.test(y)?'':' ')+y}else res.push([y,l])}
  return res.filter(([x])=>x.trim())}
 function say(t,cut){if(!voice||!t||!('speechSynthesis' in window))return;try{const ss=speechSynthesis;if(!deVoice||!enVoice)pickVoice();
  const us=chunks(t).map(([x,l])=>{const u=new SpeechSynthesisUtterance(x);u.lang=l==='en'?'en-GB':'de-DE';const vv=l==='en'?enVoice:deVoice;if(vv)u.voice=vv;u.rate=1.02;return u});
@@ -563,7 +565,8 @@ $('#lvl').onchange=e=>{lvlSel=e.target.value;me().lvl=lvlSel;save();build()};
 const setVoice=()=>{const b=$('#voice');b.setAttribute('aria-pressed',voice);b.textContent=voice?tr('Stimme an','Voice on'):tr('Stimme aus','Voice off')};
 $('#voice').onclick=()=>{voice=!voice;st.voice=voice;save();setVoice();if(!voice)try{speechSynthesis.cancel()}catch(e){}};
 setVoice();
-$('#vtest').onclick=()=>{if(!voice){voice=true;st.voice=true;save();setVoice()}try{speechSynthesis.getVoices().length&&pickVoice()}catch(e){}say(tr('Test der Ansage: Reverse Lunge, Hollow Body Hold, Shuttle Run, High Knees.','Voice test: reverse lunge, hollow body hold, shuttle run, high knees.'),true)};
+$('#vtest').onclick=()=>{if(!voice){voice=true;st.voice=true;save();setVoice()}try{speechSynthesis.getVoices().length&&pickVoice()}catch(e){}say(tr('Test der Ansage: Squat Jumps, Broad Jumps, Reverse Lunge, Hollow Body Hold, Shuttle Run, High Knees.','Voice test: squat jumps, broad jumps, reverse lunge, hollow body hold, shuttle run, high knees.'),true);
+ $('#vinfo').textContent=tr('Stimmen: ','Voices: ')+(deVoice?deVoice.name:tr('Standard','default'))+' / '+(enVoice?enVoice.name:tr('keine englische Stimme gefunden','no English voice found'))};
 
 function renderWho(){
  $('#who').innerHTML=Object.entries(st.profiles).map(([id,p])=>`<button class="chip who" data-p="${id}" aria-pressed="${st.sel.includes(id)}">${esc(pn(p))}</button>`).join('')+`<a class="chip who add" href="#profil" aria-label="${tr('Kind hinzufügen','Add child')}">+ ${tr('Kind','Child')}</a>`;
